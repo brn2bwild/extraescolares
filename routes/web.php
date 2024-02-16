@@ -17,10 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/register', function(){
-    return view('register');
+Route::get('/students/register', function () {
+    return view('students.register');
 });
 
-Route::get('/certificate', function(){
-    return view('certificate');
+Route::get('/students/certificate', function () {
+    return view('students.certificate');
 });
+
