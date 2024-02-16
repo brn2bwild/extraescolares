@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\Students\Certificate;
+use App\Livewire\Students\Register;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,14 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return view('home');
 });
 
-Route::get('/students/register', function () {
-    return view('students.register');
-});
+Route::get('/students/register', Register::class);
 
-Route::get('/students/certificate', function () {
-    return view('students.certificate');
-});
-
+Route::get('/students/certificate', Certificate::class);
