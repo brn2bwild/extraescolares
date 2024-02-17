@@ -8,9 +8,12 @@ use App\Models\Period;
 use App\Models\Student;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Mary\Traits\Toast;
 
 class Register extends Component
 {
+	use Toast;
+
 	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
 	#[Validate(['unique:students,key'], message: ['unique' => 'La matrícula ya ha sido registrada'])]
 	public $key;
@@ -49,6 +52,17 @@ class Register extends Component
 			'activity_id' => $this->activity,
 			'period_id' => $this->period,
 		]);
+
+		$this->toast(
+			type: 'success',
+			title: 'Registro guardado',
+			description: null,                  // optional (text)
+			position: 'toast-bottom toast-end',    // optional (daisyUI classes)
+			icon: 'o-check-circle',       // Optional (any icon)
+			css: 'alert-success',                  // Optional (daisyUI classes)
+			timeout: 3000,                      // optional (ms)
+			redirectTo: null                    // optional (uri)
+		);
 
 		$this->clearData();
 	}
