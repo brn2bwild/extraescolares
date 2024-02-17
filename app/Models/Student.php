@@ -8,20 +8,28 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Student extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-		public function career(): BelongsTo
-		{
-			return $this->belongsTo(Career::class);
-		}
+	protected $fillable = [
+		'key',
+		'name',
+		'activity_id',
+		'career_id',
+		'period_id',
+	];
 
-		public function period(): BelongsTo
-		{
-			return $this->belongsTo(Period::class);
-		}
+	public function career(): BelongsTo
+	{
+		return $this->belongsTo(Career::class);
+	}
 
-		public function activity(): BelongsTo
-		{
-			return $this->belongsTo(Activity::class);
-		}
+	public function period(): BelongsTo
+	{
+		return $this->belongsTo(Period::class);
+	}
+
+	public function activity(): BelongsTo
+	{
+		return $this->belongsTo(Activity::class);
+	}
 }

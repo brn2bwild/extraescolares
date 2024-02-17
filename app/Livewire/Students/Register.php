@@ -2,20 +2,64 @@
 
 namespace App\Livewire\Students;
 
+use App\Models\Activity;
+use App\Models\Career;
+use App\Models\Period;
+use App\Models\Student;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Register extends Component
 {
-	public $count = 1;
+	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
+	#[Validate(['unique:students,key'], message: ['unique' => 'La matrícula ya ha sido registrada'])]
+	public $key;
 
-	public function increment()
+	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
+	public $name;
+
+	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
+	public $career;
+
+	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
+	public $activity;
+
+	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
+	public $period;
+
+	public $careers;
+	public $activities;
+	public $periods;
+
+	public function mount()
 	{
-		$this->count++;
+		$this->careers = Career::get();
+		$this->activities = Activity::get();
+		$this->periods = Period::orderByDesc('id')->get();
 	}
 
-	public function decrement()
+	public function saveData()
 	{
-		$this->count--;
+		$this->validate();
+
+		Student::create([
+			'key' => $this->key,
+			'name'  => $this->name,
+			'career_id' => $this->career,
+			'activity_id' => $this->activity,
+			'period_id' => $this->period,
+		]);
+
+		$this->clearData();
+	}
+
+	public function clearData()
+	{
+		$this->key = null;
+		$this->name = null;
+		$this->career = null;
+		$this->activity = null;
+		$this->period = null;
 	}
 
 	public function render()

@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 	return view('home');
-});
+})->name('home');
 
-Route::get('/students/register', Register::class);
+Route::get('/students/register', Register::class)->name('students.register');
 
-Route::get('/students/certificate', Certificate::class);
+Route::get('/students/certificate', Certificate::class)->name('students.certificate');
