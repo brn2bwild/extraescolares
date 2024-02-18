@@ -1,18 +1,18 @@
 <div class="w-1/3 bg-blue-950 p-10 rounded-xl mt-24 flex flex-col justify-center items-center">
-	<h2 class="text-neutral-50 text-2xl font-bold">DATOS DEL ALUMNO</h2>
+	<h2 class="text-neutral-50 text-2xl font-bold uppercase">datos del alumno</h2>
 
 	<!-- Formulario -->
 	<form wire:submit.prevent="saveData" class="mt-4 w-full">
 		<div class="mb-2 w-full">
 			<label for="key" class="text-neutral-50 block">Matrícula</label>
 			<input wire:model="key" type="text" name="key"
-				class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none">
+				class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
 			@error('key') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 		</div>
 		<div class="mb-2 w-full">
 			<label for="name" class="text-neutral-50 block">Nombre</label>
 			<input wire:model="name" type="text" name="name"
-				class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none">
+				class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
 			@error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 		</div>
 		<div class="mb-2 w-full">
