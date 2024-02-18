@@ -15,6 +15,7 @@ class Register extends Component
 	use Toast;
 
 	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
+	#[Validate(['regex:/^\d{2}[A-Z]\d{5}$/'], message:['regex' => 'La matrícula no tiene el formato deseado'])]
 	#[Validate(['unique:students,key'], message: ['unique' => 'La matrícula ya ha sido registrada'])]
 	public $key;
 

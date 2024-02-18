@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\StudentResource\Pages;
 use App\Filament\Resources\StudentResource\RelationManagers;
 use App\Models\Student;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,6 +13,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class StudentResource extends Resource
 {
@@ -68,32 +71,48 @@ class StudentResource extends Resource
 			->columns([
 				Tables\Columns\TextColumn::make('career.name')
 					->numeric()
-					->sortable(),
+					->sortable()
+					->label('Carrera'),
 				Tables\Columns\TextColumn::make('activity.name')
 					->numeric()
-					->sortable(),
-				Tables\Columns\TextColumn::make('period.id')
+					->sortable()
+					->label('Actividad'),
+				Tables\Columns\TextColumn::make('period.lapse')
 					->numeric()
-					->sortable(),
+					->sortable()
+					->label('Periodo'),
 				Tables\Columns\TextColumn::make('key')
-					->searchable(),
+					->searchable()
+					->label('Matrícula'),
 				Tables\Columns\TextColumn::make('name')
-					->searchable(),
-				Tables\Columns\IconColumn::make('validated')
-					->boolean(),
+					->searchable()
+					->label('Nombre'),
+				Tables\Columns\ToggleColumn::make('validated')
+					->label('Validado')
+					->beforeStateUpdated(function ($record, $state) {
+						$record->update([
+							'validated_by' => Auth::user()->name,
+							'validated_at' => Carbon::now(),
+							'validation_token' => Str::random(32),
+						]);
+					}),
 				Tables\Columns\TextColumn::make('validated_by')
-					->searchable(),
+					->searchable()
+					->label('Validado por'),
 				Tables\Columns\TextColumn::make('validated_at')
 					->dateTime()
-					->sortable(),
+					->sortable()
+					->label('Fecha de validación'),
 				Tables\Columns\TextColumn::make('created_at')
 					->dateTime()
 					->sortable()
-					->toggleable(isToggledHiddenByDefault: true),
+					->toggleable(isToggledHiddenByDefault: true)
+					->label('Fecha de registro'),
 				Tables\Columns\TextColumn::make('updated_at')
 					->dateTime()
 					->sortable()
-					->toggleable(isToggledHiddenByDefault: true),
+					->toggleable(isToggledHiddenByDefault: true)
+					->label('Fecha de modificación'),
 			])
 			->filters([
 				//
