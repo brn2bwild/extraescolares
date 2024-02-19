@@ -4,9 +4,13 @@ export default {
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.vue",
+        "./vendor/robsontenorio/mary/src/View/Components/**/*.php",
     ],
     theme: {
         extend: {},
     },
-    plugins: [],
+    plugins: [require("daisyui")],
+    daisyui: {
+        themes: [],
+    },
 };
