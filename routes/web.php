@@ -3,6 +3,7 @@
 use App\Livewire\Students\Certificate;
 use App\Livewire\Students\Register;
 use Illuminate\Support\Facades\Route;
+use Spatie\LaravelPdf\facades\PDF;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,4 @@ Route::get('/', function () {
 Route::get('/students/register', Register::class)->name('students.register');
 
 Route::get('/students/certificate', Certificate::class)->name('students.certificate');
+
