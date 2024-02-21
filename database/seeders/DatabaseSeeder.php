@@ -3,6 +3,11 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Activity;
+use App\Models\Career;
+use App\Models\Period;
+use App\Models\Teacher;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,5 +23,23 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+				Teacher::create([
+					'name' => 'Rafael May',
+				]);
+
+				Career::create([
+					'name' => 'Ing. Informática'
+				]);
+
+				Activity::create([
+					'name' => 'Guitarra',
+					'capacity' => 50,
+					'teacher_id' => 1,
+				]);
+
+				Period::create([
+					'lapse' => 'Ene-Junio 2024',
+				]);
     }
 }
