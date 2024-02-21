@@ -14,11 +14,12 @@
 		</form>
 	</div>
 	@isset($student)
-	<a wire:transition href="/home" class="mt-20 rounded-xl border-2 border-blue-950 p-6">
+	<button wire:transition wire:click="downloadPdf({{ $student }})"
+		class="mt-20 rounded-xl border-2 border-blue-950 p-6">
 		<h1>
 			{{ $student->name }} - {{ $student->activity->name }} - {{ $student->validation_token }}
 		</h1>
-	</a>
+	</button>
 	@endisset
 
 	@if ($search !== null and $student === null)

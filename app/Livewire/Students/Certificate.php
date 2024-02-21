@@ -21,6 +21,11 @@ class Certificate extends Component
 			->first();
 	}
 
+	public function downloadPdf($data)
+	{
+		dd($data);
+	}
+
 	public function render()
 	{
 		return view('livewire.students.certificate')
