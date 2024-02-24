@@ -24,6 +24,18 @@ return new class extends Migration
 			$table->foreignId('period_id')
 				->constrained('periods')
 				->cascadeOnDelete();
+			$table->longText('observations')->nullable();
+			$table->json('grades')->default(
+				json_encode([
+					'first_criteria' => "0",
+					'second_criteria' => "0",
+					'third_criteria' => "0",
+					'fourth_criteria' => "0",
+					'fifth_criteria' => "0",
+					'sixth_criteria' => "0",
+					'seventh_criteria' => "0",
+				])
+			);
 			$table->boolean('validated')->default(false);
 			$table->string('validated_by')->nullable();
 			$table->timestamp('validated_at')->nullable();

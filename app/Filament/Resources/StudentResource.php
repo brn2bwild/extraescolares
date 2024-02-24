@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -87,6 +88,12 @@ class StudentResource extends Resource
 				Tables\Columns\TextColumn::make('name')
 					->searchable()
 					->label('Nombre'),
+				Tables\Columns\TextColumn::make('evaluation_grade')
+					->label('Calificación')
+					->getStateUsing(function (Model $record) {
+						$data = $record->getEvaluationPoints();
+						return $data;
+					}),
 				Tables\Columns\ToggleColumn::make('validated')
 					->label('Validado')
 					->beforeStateUpdated(function ($record, $state) {
@@ -102,7 +109,8 @@ class StudentResource extends Resource
 				Tables\Columns\TextColumn::make('validated_at')
 					->dateTime()
 					->sortable()
-					->label('Fecha de validación'),
+					->label('Fecha de validación')
+					->toggleable(isToggledHiddenByDefault: true),
 				Tables\Columns\TextColumn::make('created_at')
 					->dateTime()
 					->sortable()
@@ -118,6 +126,102 @@ class StudentResource extends Resource
 				//
 			])
 			->actions([
+				Tables\Actions\Action::make('evaluateStudent')
+					->label('Evaluación')
+					->form([
+						// Forms\Components\Select::make('authorId')
+						// 	->label('Author')
+						// 	->options(Student::query()->pluck('name', 'id'))
+						// 	->required()
+						// ->action(function (array $data, Post $record): void {
+						// 	$record->author()->associate($data['authorId']);
+						// 	$record->save();
+						// })
+						Forms\Components\Radio::make('first_criteria')
+							->label('Cumple en tiempo y forma con las actividades encomendadas alcanzando los objetivos')
+							->options([
+								0 => 'Insuficiente',
+								1 => 'Suficiente',
+								2 => 'Bueno',
+								3 => 'Notable',
+								4 => 'Excelente',
+							])
+							->inline()
+							->required(),
+						Forms\Components\Radio::make('second_criteria')
+							->label('Trabaja en equipo y se adapta a nuevas situaciones')
+							->options([
+								0 => 'Insuficiente',
+								1 => 'Suficiente',
+								2 => 'Bueno',
+								3 => 'Notable',
+								4 => 'Excelente',
+							])
+							->inline()
+							->required(),
+						Forms\Components\Radio::make('third_criteria')
+							->label('Muestra liderazgo en las actividades encomendadas')
+							->options([
+								0 => 'Insuficiente',
+								1 => 'Suficiente',
+								2 => 'Bueno',
+								3 => 'Notable',
+								4 => 'Excelente',
+							])
+							->inline()
+							->required(),
+						Forms\Components\Radio::make('fourth_criteria')
+							->label('Organiza su tiempo y trabaja de manera proactiva')
+							->options([
+								0 => 'Insuficiente',
+								1 => 'Suficiente',
+								2 => 'Bueno',
+								3 => 'Notable',
+								4 => 'Excelente',
+							])
+							->inline()
+							->required(),
+						Forms\Components\Radio::make('fifth_criteria')
+							->label('Interpreta la realidad y se sensibiliza aportando soluciones a la problemática con la actividad Cultural y/o Deportiva')
+							->options([
+								0 => 'Insuficiente',
+								1 => 'Suficiente',
+								2 => 'Bueno',
+								3 => 'Notable',
+								4 => 'Excelente',
+							])
+							->inline()
+							->required(),
+						Forms\Components\Radio::make('sixth_criteria')
+							->label('Realiza sugerencias innovadoras para beneficio o mejora del programa en el que participa')
+							->options([
+								0 => 'Insuficiente',
+								1 => 'Suficiente',
+								2 => 'Bueno',
+								3 => 'Notable',
+								4 => 'Excelente',
+							])
+							->inline()
+							->required(),
+						Forms\Components\Radio::make('seventh_criteria')
+							->label('Tiene iniciativa para ayudar en las actividades encomendadas y muestra espíritu de servicio')
+							->options([
+								0 => 'Insuficiente',
+								1 => 'Suficiente',
+								2 => 'Bueno',
+								3 => 'Notable',
+								4 => 'Excelente',
+							])
+							->inline()
+							->required(),
+					])
+					->action(function (array $data, Student $record): void {
+						$record->update([
+							'grades' => json_encode($data),
+						]);
+						// $record->author()->associate($data['authorId']);
+						// $record->save();
+					}),
 				Tables\Actions\EditAction::make(),
 			])
 			->bulkActions([
