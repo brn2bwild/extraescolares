@@ -77,6 +77,7 @@
 		Se extiende la presente en la ciudad de Teapa Tabasco; con fecha de <strong>{{ $data['validated_at'] }}</strong>.
 	</p>
 	<span class="teacher">{{ $data['activity']['teacher']['name'] }}</span>
+	<p class="token">{{ $data['validation_token'] }}</p>
 </body>
 
 </html>

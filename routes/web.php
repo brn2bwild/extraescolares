@@ -24,3 +24,5 @@ Route::get('/students/register', Register::class)->name('students.register');
 
 Route::get('/students/certificate', Certificate::class)->name('students.certificate');
 
+
+
