@@ -9,6 +9,7 @@
 		html {
 			margin: 0px;
 			padding: 0px;
+			font-family: Arial, Helvetica, sans-serif;
 		}
 
 		.body {
@@ -29,22 +30,107 @@
 			position: absolute;
 		}
 
-		.text {
+		.name {
 			position: absolute;
-			font-size: 1rem;
-			width: 80%;
-			top: 38%;
-			left: 52%;
-			transform: translate(-50%, -50%);
+			font-size: 0.9rem;
+			width: 470px;
+			top: 239px;
+			left: 263px;
+			/* transform: translate(-50%, -50%); */
 		}
 
-		.teacher {
+		.activity {
 			position: absolute;
-			font-size: 0.8rem;
-			width: 60%;
-			top: 69%;
-			left: 43%;
-			transform: translate(-50%, -50%);
+			font-size: 0.9rem;
+			width: 410px;
+			top: 258px;
+			left: 323px;
+			/* transform: translate(-50%, -50%); */
+		}
+
+		.period {
+			position: absolute;
+			font-size: 0.9rem;
+			width: 470px;
+			top: 275px;
+			left: 263px;
+			/* transform: translate(-50%, -50%); */
+		}
+
+		.observations {
+			position: absolute;
+			font-size: 0.9rem;
+			width: 632px;
+			top: 690px;
+			left: 90px;
+			/* transform: translate(-50%, -50%); */
+		}
+
+		.points {
+			position: absolute;
+			font-size: 0.9rem;
+			width: 100px;
+			top: 870px;
+			left: 560px;
+			/* transform: translate(-50%, -50%); */
+		}
+
+		.performance {
+			position: absolute;
+			font-size: 0.9rem;
+			width: 160px;
+			top: 893px;
+			left: 560px;
+			/* transform: translate(-50%, -50%); */
+		}
+
+		.first_criteria {
+			position: absolute;
+			font-size: 1.5rem;
+			width: 50px;
+			top: 380px;
+		}
+
+		.second_criteria {
+			position: absolute;
+			font-size: 1.5rem;
+			width: 50px;
+			top: 420px;
+		}
+
+		.third_criteria {
+			position: absolute;
+			font-size: 1.5rem;
+			width: 50px;
+			top: 455px;
+		}
+
+		.fourth_criteria {
+			position: absolute;
+			font-size: 1.5rem;
+			width: 50px;
+			top: 485px;
+		}
+
+		.fifth_criteria {
+			position: absolute;
+			font-size: 1.5rem;
+			width: 50px;
+			top: 535px;
+		}
+
+		.sixth_criteria {
+			position: absolute;
+			font-size: 1.5rem;
+			width: 50px;
+			top: 585px;
+		}
+
+		.seventh_criteria {
+			position: absolute;
+			font-size: 1.5rem;
+			width: 50px;
+			top: 635px;
 		}
 
 		.content {
@@ -64,13 +150,21 @@
 </head>
 
 <body>
-	<img class="image-background" src="{{ storage_path('certificate/template.jpg') }}" alt="template">
-	{{-- <h2>{{ $data['name'] }}</h2> --}}
-	<p class="text">
-		Esto es una prueba
-	</p>
-	{{-- <span class="teacher">{{ $data['activity']['teacher']['name'] }}</span>
-	<p class="token">{{ $data['validation_token'] }}</p> --}}
+	<img class="image-background" src="{{ storage_path('evaluation/template.jpg') }}" alt="template">
+	<span class="name">{{ $data['name'] }}</span>
+	<span class="activity">{{ $data['activity']['name'] }}</span>
+	<span class="period">{{ $data['period']['lapse'] }}</span>
+	<span class="first_criteria" style="left: {{ $data['first_criteria'] }}"><strong>X</strong></span>
+	<span class="second_criteria" style="left: {{ $data['second_criteria'] }}"><strong>X</strong></span>
+	<span class="third_criteria" style="left: {{ $data['third_criteria'] }}"><strong>X</strong></span>
+	<span class="fourth_criteria" style="left: {{ $data['fourth_criteria'] }}"><strong>X</strong></span>
+	<span class="fifth_criteria" style="left: {{ $data['fifth_criteria'] }}"><strong>X</strong></span>
+	<span class="sixth_criteria" style="left: {{ $data['sixth_criteria'] }}"><strong>X</strong></span>
+	<span class="seventh_criteria" style="left: {{ $data['seventh_criteria'] }}"><strong>X</strong></span>
+	<p class="observations">{{ $data['observations'] }}</p>
+	<span class="points">{{ $data['points'] }}</span>
+	<span class="performance">{{ $data['performance'] }}</span>
+	{{-- <p class="token">{{ $data['validation_token'] }}</p> --}}
 </body>
 
 </html>

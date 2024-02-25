@@ -28,6 +28,6 @@ Route::get('/students/register', Register::class)
 Route::get('/students/certificate', Certificate::class)
 	->name('students.certificate');
 
-Route::get('/admin/student_grades/{student}', StudentGradeController::class)
+Route::get('/admin/student_grades/{id}', StudentGradeController::class)
 	->middleware('auth')
 	->name('admin.student_grades');
