@@ -94,8 +94,8 @@ class StudentResource extends Resource
 						$data = $record->getEvaluationPoints();
 						return $data;
 					}),
-				Tables\Columns\ToggleColumn::make('validated')
-					->label('Validado')
+				Tables\Columns\CheckboxColumn::make('validated')
+					->label('Válido')
 					->beforeStateUpdated(function ($record, $state) {
 						$record->update([
 							'validated_by' => Auth::user()->name,
@@ -105,7 +105,8 @@ class StudentResource extends Resource
 					}),
 				Tables\Columns\TextColumn::make('validated_by')
 					->searchable()
-					->label('Validado por'),
+					->label('Validado por')
+					->toggleable(isToggledHiddenByDefault: true),
 				Tables\Columns\TextColumn::make('validated_at')
 					->dateTime()
 					->sortable()
@@ -127,7 +128,7 @@ class StudentResource extends Resource
 			])
 			->actions([
 				Tables\Actions\Action::make('evaluateStudent')
-					->label('Evaluación')
+					->label('Evaluar')
 					->form([
 						// Forms\Components\Select::make('authorId')
 						// 	->label('Author')
@@ -222,6 +223,9 @@ class StudentResource extends Resource
 						// $record->author()->associate($data['authorId']);
 						// $record->save();
 					}),
+				Tables\Actions\Action::make('printEvaluation')
+					->label('Notas')
+					->url(fn (Student $record): string => route('admin.student_grades', $record)),
 				Tables\Actions\EditAction::make(),
 			])
 			->bulkActions([

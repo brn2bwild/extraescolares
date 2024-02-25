@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\StudentGradeController;
 use App\Livewire\Admin\Grade;
 use App\Livewire\Students\Certificate;
 use App\Livewire\Students\Register;
@@ -27,6 +28,6 @@ Route::get('/students/register', Register::class)
 Route::get('/students/certificate', Certificate::class)
 	->name('students.certificate');
 
-Route::get('/admin/student_grades/{id}', Grade::class)
+Route::get('/admin/student_grades/{student}', StudentGradeController::class)
 	->middleware('auth')
 	->name('admin.student_grades');
