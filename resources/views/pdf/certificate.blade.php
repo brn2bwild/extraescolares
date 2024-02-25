@@ -9,6 +9,7 @@
 		html {
 			margin: 0px;
 			padding: 0px;
+			font-family: Arial, Helvetica, sans-serif;
 		}
 
 		.body {
@@ -34,17 +35,21 @@
 			font-size: 1rem;
 			width: 80%;
 			top: 38%;
-			left: 52%;
+			left: 51.5%;
 			transform: translate(-50%, -50%);
+			text-align: justify;
+			text-justify: auto;
+			line-height: 150%;
 		}
 
 		.teacher {
 			position: absolute;
 			font-size: 0.8rem;
-			width: 60%;
-			top: 69%;
-			left: 43%;
+			width: 210px;
+			top: 73%;
+			left: 29%;
 			transform: translate(-50%, -50%);
+			text-align: center;
 		}
 
 		.content {
@@ -55,9 +60,9 @@
 		.token {
 			position: absolute;
 			z-index: 1;
-			font-size: 1rem;
-			bottom: 0%;
-			right: 3%;
+			font-size: 0.8rem;
+			bottom: 125px;
+			right: 80px;
 			transform: translate(0%, -50%);
 		}
 	</style>
@@ -71,7 +76,9 @@
 		conocimiento que el (la)
 		estudiante <strong>{{ $data['name'] }}</strong>, con número de control <strong>{{ $data['key'] }}</strong> de la
 		carrera de <strong>{{ $data['career']['name'] }}</strong>, ha cumplido su actividad Cultural y/o Deportiva de
-		<strong>{{ $data['activity']['name'] }}</strong> con el nivel de desempeño Bueno y un valor numérico de 2 durante el
+		<strong>{{ $data['activity']['name'] }}</strong> con un nivel de desempeño <strong>{{ $data['performance']
+			}}</strong> y un valor numérico de <strong>{{
+			$data['points'] }}</strong> durante el
 		periodo escolar <strong>{{ $data['period']['lapse'] }}</strong>
 		con un valor curricular de 2 créditos.<br><br>
 		Se extiende la presente en la ciudad de Teapa Tabasco; con fecha de <strong>{{ $data['validated_at'] }}</strong>.
