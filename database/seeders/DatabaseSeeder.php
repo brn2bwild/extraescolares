@@ -8,6 +8,7 @@ use App\Models\Activity;
 use App\Models\Career;
 use App\Models\Period;
 use App\Models\Teacher;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -24,6 +25,13 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+				User::create([
+					'name' => 'Example User', 
+					'email' => 'user@example.com',
+					'password' => 'password',
+					'is_admin' => true,
+				]);
+
 				Teacher::create([
 					'name' => 'Rafael May',
 				]);
@@ -39,7 +47,7 @@ class DatabaseSeeder extends Seeder
 				]);
 
 				Period::create([
-					'lapse' => 'Ene-Junio 2024',
+					'lapse' => 'Enero - Junio 2024',
 				]);
     }
 }
