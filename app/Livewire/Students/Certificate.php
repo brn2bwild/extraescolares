@@ -3,6 +3,7 @@
 namespace App\Livewire\Students;
 
 use App\Models\Student;
+use Carbon\Carbon;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -29,15 +30,21 @@ class Certificate extends Component
 
 	public function downloadPdf($data)
 	{
+		$data['points'] = $this->student->getEvaluationPoints();
+		$date = Carbon::createFromDate($this->student->validated_at);
+
+		$data['validated_at'] = $date->isoFormat('D MMMM YYYY');
+
+		$data['performance'] = $this->student->getEvaluationPerformance();
+
 		view()->share('data', $data);
 		$pdf = PDF::loadView('pdf.certificate', $data)
 			->setPaper('letter', 'portrait')
 			->output();
 
-
 		return response()->streamDownload(
 			fn () => print($pdf),
-			"certificate.pdf"
+			strtolower(str_replace(" ", "_", $data['name'])) . "_certificate.pdf"
 		);
 	}
 
