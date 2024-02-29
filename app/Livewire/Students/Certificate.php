@@ -9,6 +9,8 @@ use Livewire\Component;
 
 use PDF;
 
+use function Termwind\render;
+
 class Certificate extends Component
 {
 	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
@@ -18,7 +20,7 @@ class Certificate extends Component
 
 	public function searchData()
 	{
-		$this->student = Student::with('activity')
+		$student = Student::with('activity')
 			->with('activity.teacher')
 			->with('career')
 			->with('period')
@@ -26,25 +28,24 @@ class Certificate extends Component
 			->where('key', $this->search)
 			->orWhere('validation_token', $this->search)
 			->first();
+
+		$this->student = $student->toArray();
+		$this->student['points'] = $student->getEvaluationPoints();
+		$this->student['performance'] = $student->getEvaluationPerformance();
+		$date = Carbon::createFromDate($this->student['validated_at']);
+		$this->student['validated_at'] = $date->isoFormat('D MMMM YYYY');
 	}
 
-	public function downloadPdf($data)
+	public function downloadPdf()
 	{
-		$data['points'] = $this->student->getEvaluationPoints();
-		$date = Carbon::createFromDate($this->student->validated_at);
-
-		$data['validated_at'] = $date->isoFormat('D MMMM YYYY');
-
-		$data['performance'] = $this->student->getEvaluationPerformance();
-
-		view()->share('data', $data);
-		$pdf = PDF::loadView('pdf.certificate', $data)
+		view()->share('student', $this->student);
+		$pdf = PDF::loadView('pdf.certificate', $this->student)
 			->setPaper('letter', 'portrait')
 			->output();
 
 		return response()->streamDownload(
 			fn () => print($pdf),
-			strtolower(str_replace(" ", "_", $data['name'])) . "_certificate.pdf"
+			strtolower(str_replace(" ", "_", $this->student['name'])) . "_certificate.pdf"
 		);
 	}
 

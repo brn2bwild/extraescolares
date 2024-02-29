@@ -14,10 +14,9 @@
 		</form>
 	</div>
 	@isset($student)
-	<button wire:transition wire:click="downloadPdf({{ $student }})"
-		class="mt-20 rounded-xl border-2 border-blue-950 p-6">
+	<button wire:transition wire:click="downloadPdf()" class="mt-20 rounded-xl border-2 border-blue-950 p-6">
 		<h1>
-			{{ $student->name }} - {{ $student->activity->name }} - {{ $student->validation_token }}
+			{{ $student['name'] }} - {{ $student['activity']['name'] }} - {{ $student['validation_token'] }}
 		</h1>
 	</button>
 	@endisset
