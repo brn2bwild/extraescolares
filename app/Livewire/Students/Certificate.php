@@ -29,11 +29,13 @@ class Certificate extends Component
 			->orWhere('validation_token', $this->search)
 			->first();
 
-		$this->student = $student->toArray();
-		$this->student['points'] = $student->getEvaluationPoints();
-		$this->student['performance'] = $student->getEvaluationPerformance();
-		$date = Carbon::createFromDate($this->student['validated_at']);
-		$this->student['validated_at'] = $date->isoFormat('D MMMM YYYY');
+			if(isset($student)){
+				$this->student = $student->toArray();
+				$this->student['points'] = $student->getEvaluationPoints();
+				$this->student['performance'] = $student->getEvaluationPerformance();
+				$date = Carbon::createFromDate($this->student['validated_at']);
+				$this->student['validated_at'] = $date->isoFormat('D MMMM YYYY');
+			}
 	}
 
 	public function downloadPdf()

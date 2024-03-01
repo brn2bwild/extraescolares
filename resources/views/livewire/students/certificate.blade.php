@@ -23,7 +23,7 @@
 
 	@if ($search !== null and $student === null)
 	<h1 wire:transition class="mt-20 rounded-xl border-2 border-blue-950 p-6">
-		No se encontró ninguna constancia con la matricula {{ $search }}
+		No se encontró ninguna constancia con la matricula <span class="uppercase">{{ $search }}</span>
 	</h1>
 	@endif
 </div>
