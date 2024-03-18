@@ -168,10 +168,14 @@ return [
 		// App\Providers\BroadcastServiceProvider::class,
 		App\Providers\EventServiceProvider::class,
 		App\Providers\Filament\AdminPanelProvider::class,
+		App\Providers\Filament\TeacherPanelProvider::class,
 		App\Providers\RouteServiceProvider::class,
 
 		// laravel-dompff provider
 		Barryvdh\DomPDF\ServiceProvider::class,
+
+		// Spatie's Laravel Permission package
+		Spatie\Permission\PermissionServiceProvider::class,
 	])->toArray(),
 
 	/*
