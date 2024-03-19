@@ -16,10 +16,6 @@ class TestSeeder extends Seeder
 	 */
 	public function run(): void
 	{
-		Teacher::create([
-			'name' => 'Rafael May',
-		]);
-
 		Career::create([
 			'name' => 'Ing. Informática'
 		]);
@@ -27,7 +23,7 @@ class TestSeeder extends Seeder
 		Activity::create([
 			'name' => 'Guitarra',
 			'capacity' => 50,
-			'teacher_id' => 1,
+			'user_id' => 1,
 		]);
 
 		Period::create([
