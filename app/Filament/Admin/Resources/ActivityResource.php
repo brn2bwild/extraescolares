@@ -5,7 +5,7 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\ActivityResource\Pages;
 use App\Filament\Admin\Resources\ActivityResource\RelationManagers;
 use App\Models\Activity;
-use App\Models\Teacher;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -30,10 +30,10 @@ class ActivityResource extends Resource
 	{
 		return $form
 			->schema([
-				Forms\Components\Select::make('teacher_id')
+				Forms\Components\Select::make('user_id')
 					->label('Maestro')
 					->required()
-					->options(Teacher::all()->pluck('name', 'id')),
+					->options(User::all()->pluck('name', 'id')),
 				Forms\Components\TextInput::make('name')
 					->label('Nombre')
 					->required()
@@ -49,11 +49,14 @@ class ActivityResource extends Resource
 	{
 		return $table
 			->columns([
-				Tables\Columns\TextColumn::make('teacher.name')
+				Tables\Columns\TextColumn::make('user.name')
+					->label('Maestro')
 					->sortable(),
 				Tables\Columns\TextColumn::make('name')
+					->label('Nombre')
 					->searchable(),
 				Tables\Columns\TextColumn::make('capacity')
+					->label('Capacidad')
 					->numeric()
 					->sortable(),
 				Tables\Columns\TextColumn::make('created_at')

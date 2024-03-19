@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Filament\Admin\Resources\TeacherResource\Pages;
+namespace App\Filament\Admin\Resources\AdministratorResource\Pages;
 
-use App\Filament\Admin\Resources\TeacherResource;
+use App\Filament\Admin\Resources\AdministratorResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Models\Role;
 
-class CreateTeacher extends CreateRecord
+class CreateAdministrator extends CreateRecord
 {
-	protected static string $resource = TeacherResource::class;
+	protected static string $resource = AdministratorResource::class;
 
 	protected function handleRecordCreation(array $data): Model
 	{
@@ -20,7 +20,7 @@ class CreateTeacher extends CreateRecord
 
 		$record->save();
 
-		$record->assignRole('teacher');
+		$record->assignRole('admin');
 
 		return $record;
 		// return static::getModel()::create($data);

@@ -2,11 +2,11 @@
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Resources\TeacherResource\Pages;
-use App\Filament\Admin\Resources\TeacherResource\RelationManagers;
+use App\Filament\Admin\Resources\AdministratorResource\Pages;
+use App\Filament\Admin\Resources\AdministratorResource\RelationManagers;
+use App\Models\Administrator;
 use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -15,17 +15,17 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Spatie\Permission\Models\Role;
 
-class TeacherResource extends Resource
+class AdministratorResource extends Resource
 {
 	protected static ?string $model = User::class;
 
 	protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-	protected static ?string $modelLabel = 'Maestro';
+	protected static ?string $modelLabel = 'Administrador';
 
-	protected static ?string $pluralModelLabel = 'Maestros';
+	protected static ?string $pluralModelLabel = 'Administradores';
 
-	protected static ?int $navigationSort = 3;
+	protected static ?int $navigationSort = 1;
 
 	public static function form(Form $form): Form
 	{
@@ -78,7 +78,7 @@ class TeacherResource extends Resource
 					->toggleable(isToggledHiddenByDefault: true),
 			])
 			->modifyQueryUsing(
-				fn (Builder $query) => $query->getModel()->role('teacher')
+				fn (Builder $query) => $query->getModel()->role('admin')
 			)
 			->filters([
 				//
@@ -103,9 +103,9 @@ class TeacherResource extends Resource
 	public static function getPages(): array
 	{
 		return [
-			'index' => Pages\ListTeachers::route('/'),
-			'create' => Pages\CreateTeacher::route('/create'),
-			'edit' => Pages\EditTeacher::route('/{record}/edit'),
+			'index' => Pages\ListAdministrators::route('/'),
+			'create' => Pages\CreateAdministrator::route('/create'),
+			'edit' => Pages\EditAdministrator::route('/{record}/edit'),
 		];
 	}
 }

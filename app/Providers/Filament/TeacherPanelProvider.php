@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Teacher\Widgets\TeacherStats;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -29,7 +30,7 @@ class TeacherPanelProvider extends PanelProvider
 			->plugin(
 				PanelRoles::make()
 					->roleToAssign('teacher')
-					->restrictedRoles(['admin', 'teacher'])
+					->restrictedRoles(['teacher'])
 			)
 			->login()
 			->colors([
@@ -43,7 +44,8 @@ class TeacherPanelProvider extends PanelProvider
 			->discoverWidgets(in: app_path('Filament/Teacher/Widgets'), for: 'App\\Filament\\Teacher\\Widgets')
 			->widgets([
 				Widgets\AccountWidget::class,
-				Widgets\FilamentInfoWidget::class,
+				TeacherStats::class,
+				// Widgets\FilamentInfoWidget::class,
 			])
 			->middleware([
 				EncryptCookies::class,
