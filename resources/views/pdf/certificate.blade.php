@@ -42,7 +42,7 @@
 			line-height: 150%;
 		}
 
-		.teacher {
+		.user {
 			position: absolute;
 			font-size: 0.8rem;
 			width: 210px;
@@ -72,7 +72,7 @@
 	<img class="image-background" src="{{ storage_path('certificate/template.jpg') }}" alt="template">
 	{{-- <h2>{{ $student['name'] }}</h2> --}}
 	<p class="text">
-		El que suscribe <strong>{{ $student['activity']['teacher']['name'] }}</strong>, por este medio se permite hacer de
+		El que suscribe <strong>{{ $student['activity']['user']['name'] }}</strong>, por este medio se permite hacer de
 		su
 		conocimiento que el (la)
 		estudiante <strong>{{ $student['name'] }}</strong>, con número de control <strong>{{ $student['key'] }}</strong> de
@@ -85,7 +85,7 @@
 		con un valor curricular de 2 créditos.<br><br>
 		Se extiende la presente en la ciudad de Teapa Tabasco; con fecha de <strong>{{ $student['validated_at'] }}</strong>.
 	</p>
-	<span class="teacher">{{ $student['activity']['teacher']['name'] }}</span>
+	<span class="user">{{ $student['activity']['user']['name'] }}</span>
 	<p class="token">{{ $student['validation_token'] }}</p>
 </body>
 

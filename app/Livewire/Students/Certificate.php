@@ -21,7 +21,7 @@ class Certificate extends Component
 	public function searchData()
 	{
 		$student = Student::with('activity')
-			->with('activity.teacher')
+			->with('activity.user')
 			->with('career')
 			->with('period')
 			->where('validated', true)
