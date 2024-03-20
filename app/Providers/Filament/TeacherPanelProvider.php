@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Widgets\AdminResourcesStats;
+use App\Filament\Teacher\Widgets\TeacherStats;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -20,32 +20,32 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Shanerbaner82\PanelRoles\PanelRoles;
 
-class AdminPanelProvider extends PanelProvider
+class TeacherPanelProvider extends PanelProvider
 {
 	public function panel(Panel $panel): Panel
 	{
 		return $panel
-			->default()
+			->id('teacher')
+			->path('teacher')
 			->plugin(
 				PanelRoles::make()
-					->roleToAssign('admin')
-					->restrictedRoles(['admin'])
+					->roleToAssign('teacher')
+					->restrictedRoles(['teacher'])
 			)
-			->id('admin')
-			->path('admin')
 			->login()
 			->colors([
 				'primary' => Color::Amber,
 			])
-			->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
-			->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
+			->discoverResources(in: app_path('Filament/Teacher/Resources'), for: 'App\\Filament\\Teacher\\Resources')
+			->discoverPages(in: app_path('Filament/Teacher/Pages'), for: 'App\\Filament\\Teacher\\Pages')
 			->pages([
 				Pages\Dashboard::class,
 			])
-			->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+			->discoverWidgets(in: app_path('Filament/Teacher/Widgets'), for: 'App\\Filament\\Teacher\\Widgets')
 			->widgets([
 				Widgets\AccountWidget::class,
-				AdminResourcesStats::class,
+				TeacherStats::class,
+				// Widgets\FilamentInfoWidget::class,
 			])
 			->middleware([
 				EncryptCookies::class,

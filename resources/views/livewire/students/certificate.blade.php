@@ -14,17 +14,16 @@
 		</form>
 	</div>
 	@isset($student)
-	<button wire:transition wire:click="downloadPdf({{ $student }})"
-		class="mt-20 rounded-xl border-2 border-blue-950 p-6">
+	<button wire:transition wire:click="downloadPdf()" class="mt-20 rounded-xl border-2 border-blue-950 p-6">
 		<h1>
-			{{ $student->name }} - {{ $student->activity->name }} - {{ $student->validation_token }}
+			{{ $student['name'] }} - {{ $student['activity']['name'] }} - {{ $student['validation_token'] }}
 		</h1>
 	</button>
 	@endisset
 
 	@if ($search !== null and $student === null)
 	<h1 wire:transition class="mt-20 rounded-xl border-2 border-blue-950 p-6">
-		No se encontró ninguna constancia con la matricula {{ $search }}
+		No se encontró ninguna constancia con la matricula <span class="uppercase">{{ $search }}</span>
 	</h1>
 	@endif
 </div>

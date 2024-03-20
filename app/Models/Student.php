@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Str;
 
 class Student extends Model
@@ -23,6 +24,11 @@ class Student extends Model
 		'validated_at',
 		'validation_token',
 	];
+
+	public function user(): HasOneThrough
+	{
+		return $this->hasOneThrough(User::class, Activity::class);
+	}
 
 	public function career(): BelongsTo
 	{
