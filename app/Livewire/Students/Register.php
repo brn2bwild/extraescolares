@@ -15,20 +15,20 @@ class Register extends Component
 	use Toast;
 
 	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
-	#[Validate(['regex:/^\d{2}[A-Z]\d{5}$/'], message:['regex' => 'La matrícula no tiene el formato deseado'])]
-	#[Validate(['unique:students,key'], message: ['unique' => 'La matrícula ya ha sido registrada'])]
-	public $key;
+	#[Validate(['regex:/^\d{14,16}$/'], message: ['regex' => 'El número de ficha no tiene el formato deseado'])]
+	#[Validate(['unique:students,inscription_code'], message: ['unique' => 'El número de ficha ya ha sido registrado'])]
+	public $inscription_code;
 
-	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
+	#[Validate(['required'], message: ['required' => 'El campo nombre es requerido'])]
 	public $name;
 
-	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
+	#[Validate(['required'], message: ['required' => 'El campo carrera es requerido'])]
 	public $career;
 
-	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
+	#[Validate(['required'], message: ['required' => 'El campo extraescolar es requerido'])]
 	public $activity;
 
-	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
+	#[Validate(['required'], message: ['required' => 'El campo periodo es requerido'])]
 	public $period;
 
 	public $careers;
@@ -37,9 +37,9 @@ class Register extends Component
 
 	public function mount()
 	{
-		$this->careers = Career::get();
-		$this->activities = Activity::get();
-		$this->periods = Period::orderByDesc('id')->get();
+		$this->careers = Career::get()->toArray();
+		$this->activities = Activity::get()->toArray();
+		$this->periods = Period::orderByDesc('id')->get()->toArray();
 	}
 
 	public function saveData()
@@ -47,7 +47,7 @@ class Register extends Component
 		$this->validate();
 
 		Student::create([
-			'key' => $this->key,
+			'inscription_code' => $this->inscription_code,
 			'name'  => $this->name,
 			'career_id' => $this->career,
 			'activity_id' => $this->activity,
@@ -70,7 +70,7 @@ class Register extends Component
 
 	public function clearData()
 	{
-		$this->key = null;
+		$this->inscription_code = null;
 		$this->name = null;
 		$this->career = null;
 		$this->activity = null;

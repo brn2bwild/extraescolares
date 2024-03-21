@@ -13,7 +13,8 @@ class Student extends Model
 	use HasFactory;
 
 	protected $fillable = [
-		'key',
+		'inscription_code',
+		'university_enrollment',
 		'name',
 		'activity_id',
 		'career_id',

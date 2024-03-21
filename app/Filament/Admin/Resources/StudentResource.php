@@ -45,8 +45,11 @@ class StudentResource extends Resource
 					->relationship('period', 'lapse')
 					->required()
 					->label('Periodo'),
-				Forms\Components\TextInput::make('key')
+				Forms\Components\TextInput::make('inscription_code')
 					->required()
+					->maxLength(255)
+					->label('Número de ficha'),
+				Forms\Components\TextInput::make('university_enrollment')
 					->maxLength(255)
 					->label('Matrícula'),
 				Forms\Components\TextInput::make('name')
@@ -70,10 +73,6 @@ class StudentResource extends Resource
 	{
 		return $table
 			->columns([
-				Tables\Columns\TextColumn::make('career.name')
-					->numeric()
-					->sortable()
-					->label('Carrera'),
 				Tables\Columns\TextColumn::make('activity.name')
 					->numeric()
 					->sortable()
@@ -82,7 +81,10 @@ class StudentResource extends Resource
 					->numeric()
 					->sortable()
 					->label('Periodo'),
-				Tables\Columns\TextColumn::make('key')
+				Tables\Columns\TextColumn::make('inscription_code')
+					->searchable()
+					->label('Número de ficha'),
+				Tables\Columns\TextColumn::make('university_enrollment')
 					->searchable()
 					->label('Matrícula'),
 				Tables\Columns\TextColumn::make('name')
@@ -112,6 +114,11 @@ class StudentResource extends Resource
 					->sortable()
 					->label('Fecha de validación')
 					->toggleable(isToggledHiddenByDefault: true),
+				Tables\Columns\TextColumn::make('career.name')
+					->numeric()
+					->sortable()
+					->toggleable(isToggledHiddenByDefault: true)
+					->label('Carrera'),
 				Tables\Columns\TextColumn::make('created_at')
 					->dateTime()
 					->sortable()

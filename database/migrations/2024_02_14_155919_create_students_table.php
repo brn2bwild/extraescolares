@@ -13,7 +13,8 @@ return new class extends Migration
 	{
 		Schema::create('students', function (Blueprint $table) {
 			$table->id();
-			$table->string('key');
+			$table->string('inscription_code');
+			$table->string('university_enrollment')->nullable();
 			$table->string('name');
 			$table->foreignId('career_id')
 				->constrained('careers')

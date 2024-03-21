@@ -4,10 +4,10 @@
 	<!-- Formulario -->
 	<form wire:submit.prevent="saveData" class="mt-4 w-full">
 		<div class="mb-2 w-full">
-			<label for="key" class="text-neutral-50 block">Matrícula</label>
-			<input wire:model="key" type="text" name="key"
+			<label for="inscription_code" class="text-neutral-50 block">Número de ficha</label>
+			<input wire:model="inscription_code" type="text" name="inscription_code"
 				class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
-			@error('key') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+			@error('inscription_code') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 		</div>
 		<div class="mb-2 w-full">
 			<label for="name" class="text-neutral-50 block">Nombre</label>
@@ -20,7 +20,7 @@
 			<select wire:model="career" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
 				<option value="">Seleccione una opción</option>
 				@foreach ($careers as $career)
-				<option value="{{ $career->id }}">{{ $career->name }}</option>
+				<option value="{{ $career['id'] }}">{{ $career['name'] }}</option>
 				@endforeach
 			</select>
 			@error('career') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -30,7 +30,7 @@
 			<select wire:model="activity" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
 				<option value="">Seleccione una opción</option>
 				@foreach ($activities as $activity)
-				<option value="{{ $activity->id }}">{{ $activity->name }}</option>
+				<option value="{{ $activity['id'] }}">{{ $activity['name'] }}</option>
 				@endforeach
 			</select>
 			@error('activity') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -40,7 +40,7 @@
 			<select wire:model="period" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
 				<option value="">Seleccione una opción</option>
 				@foreach ($periods as $period)
-				<option value="{{ $period->id }}">{{ $period->lapse }}</option>
+				<option value="{{ $period['id'] }}">{{ $period['lapse'] }}</option>
 				@endforeach
 			</select>
 			@error('period') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
