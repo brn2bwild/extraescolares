@@ -35,6 +35,9 @@ class StudentResource extends Resource
 	{
 		return $form
 			->schema([
+				Forms\Components\Toggle::make('validated')
+					->required()
+					->label('Válido'),
 				Forms\Components\Select::make('career_id')
 					->relationship('career', 'name')
 					->required()
@@ -55,16 +58,13 @@ class StudentResource extends Resource
 					->required()
 					->maxLength(255)
 					->label('Nombre'),
-				Forms\Components\Toggle::make('validated')
-					->required()
-					->label('Validado'),
-				Forms\Components\TextInput::make('validated_by')
-					->required()
-					->maxLength(255)
-					->label('Validado por'),
-				Forms\Components\DateTimePicker::make('validated_at')
-					->required()
-					->label('Fecha de validación'),
+				// Forms\Components\TextInput::make('validated_by')
+				// 	->required()
+				// 	->maxLength(255)
+				// 	->label('Validado por'),
+				// Forms\Components\DateTimePicker::make('validated_at')
+				// 	->required()
+				// 	->label('Fecha de validación'),
 			]);
 	}
 
