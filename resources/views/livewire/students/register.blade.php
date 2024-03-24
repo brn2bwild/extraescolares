@@ -1,4 +1,4 @@
-<div class="w-1/3 bg-blue-950 p-10 rounded-xl mt-24 flex flex-col justify-center items-center">
+<div class="w-1/3 bg-blue-950 p-10 rounded-xl mt-10 flex flex-col justify-center items-center">
 	<h2 class="text-neutral-50 text-2xl font-bold uppercase">datos del alumno</h2>
 
 	<!-- Formulario -->
@@ -44,6 +44,13 @@
 				@endforeach
 			</select>
 			@error('period') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+		</div>
+		<div class="mb-2 w-full">
+			<label for="illnes" class="text-neutral-50 block">¿Padeces alguna enfermedad crónica o degenerativa?</label>
+			<textarea wire:model="illnes" type="text" name="illnes"
+				class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none resize-none placeholder-black"
+				placeholder="En caso no padecer, escribir ninguna" rows="4" cols="50" required></textarea>
+			@error('illnes') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 		</div>
 		<div class="w-full flex justify-center mt-8">
 			<button type="submit"

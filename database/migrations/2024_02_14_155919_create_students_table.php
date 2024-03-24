@@ -25,6 +25,7 @@ return new class extends Migration
 			$table->foreignId('period_id')
 				->constrained('periods')
 				->cascadeOnDelete();
+			$table->string('illnes');
 			$table->longText('observations')->nullable();
 			$table->json('grades')->default(
 				json_encode([

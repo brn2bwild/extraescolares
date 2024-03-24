@@ -19,6 +19,7 @@ class Student extends Model
 		'activity_id',
 		'career_id',
 		'period_id',
+		'illnes',
 		'grades',
 		'validated',
 		'validated_by',

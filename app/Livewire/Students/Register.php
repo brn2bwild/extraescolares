@@ -31,6 +31,9 @@ class Register extends Component
 	#[Validate(['required'], message: ['required' => 'El campo periodo es requerido'])]
 	public $period;
 
+	#[Validate(['required'], message: ['required' => 'El campo periodo es requerido'])]
+	public $illnes;
+
 	public $careers;
 	public $activities;
 	public $periods;
@@ -38,7 +41,11 @@ class Register extends Component
 	public function mount()
 	{
 		$this->careers = Career::get()->toArray();
-		$this->activities = Activity::get()->toArray();
+		$this->activities = Activity::get()
+			->filter(function ($activity) {
+				if (Student::where('activity_id', $activity->id)->count() < $activity->capacity) return $activity;
+			})
+			->toArray();
 		$this->periods = Period::orderByDesc('id')->get()->toArray();
 	}
 
@@ -52,6 +59,7 @@ class Register extends Component
 			'career_id' => $this->career,
 			'activity_id' => $this->activity,
 			'period_id' => $this->period,
+			'illnes' => $this->illnes,
 		]);
 
 		$this->toast(
