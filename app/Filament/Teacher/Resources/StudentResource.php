@@ -58,10 +58,12 @@ class StudentResource extends Resource
 					->required()
 					->maxLength(255)
 					->label('Nombre'),
-				// Forms\Components\TextInput::make('validated_by')
-				// 	->required()
-				// 	->maxLength(255)
-				// 	->label('Validado por'),
+				Forms\Components\Textarea::make('illnes')
+					->rows(3)
+					->cols(20)
+					->readonly()
+					->maxLength(255)
+					->label('Enfermedades'),
 				// Forms\Components\DateTimePicker::make('validated_at')
 				// 	->required()
 				// 	->label('Fecha de validación'),
@@ -90,6 +92,9 @@ class StudentResource extends Resource
 				Tables\Columns\TextColumn::make('name')
 					->searchable()
 					->label('Nombre'),
+				Tables\Columns\TextColumn::make('illnes')
+					->searchable()
+					->label('Enfermedades'),
 				Tables\Columns\TextColumn::make('evaluation_grade')
 					->label('Calificación')
 					->getStateUsing(function (Model $record) {
