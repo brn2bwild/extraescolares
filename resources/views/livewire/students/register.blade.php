@@ -46,7 +46,11 @@
 			@error('period') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 		</div>
 		<div class="w-full flex justify-center mt-8">
-			<button type="submit" class="bg-neutral-50 rounded-xl px-4 py-2 font-medium text-blue-950">Registrarse</button>
+			<button type="submit"
+				class="bg-neutral-50 rounded-xl px-4 py-2 font-medium text-blue-950 flex items-center justify-between">
+				<img wire:loading class="h-4 mr-2" src="/storage/images/spinner.svg" alt="spinner">
+				Registrarse
+			</button>
 		</div>
 	</form>
 </div>
