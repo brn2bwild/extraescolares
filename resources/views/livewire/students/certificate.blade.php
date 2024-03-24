@@ -9,21 +9,27 @@
 				@error('search') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 			</div>
 			<div class="w-full flex justify-center mt-8">
-				<button type="submit" class="bg-neutral-50 rounded-xl px-4 py-2 font-medium text-blue-950">Consultar</button>
+				<button type="submit"
+					class="bg-neutral-50 rounded-xl px-4 py-2 font-medium text-blue-950 flex justify-between items-center">
+					<img wire:loading src="/storage/images/spinner.svg" alt="spinner" class="h-6 mr-2">
+					Consultar
+				</button>
 			</div>
 		</form>
 	</div>
-	@isset($student)
-	<button wire:transition wire:click="downloadPdf()" class="mt-20 rounded-xl border-2 border-blue-950 p-6">
-		<h1>
-			{{ $student['name'] }} - {{ $student['activity']['name'] }} - {{ $student['validation_token'] }}
-		</h1>
-	</button>
-	@endisset
 
-	@if ($search !== null and $student === null)
-	<h1 wire:transition class="mt-20 rounded-xl border-2 border-blue-950 p-6">
-		No se encontró ninguna constancia con la matricula <span class="uppercase">{{ $search }}</span>
+	@if ($search !== null && $student_data === null)
+	<h1 wire:transition class="mt-20 rounded-xl border-0 bg-blue-950 text-neutral-50 p-6">
+		No se encontró ninguna coincidencia con <span class="uppercase font-medium">{{ $search }}</span>
 	</h1>
 	@endif
+	@if( $search !== null && $student_data !== null)
+	<button wire:transition wire:click="downloadPdf()" class="mt-20 rounded-xl border-0 bg-blue-950 text-neutral-50 p-6">
+		<span>
+			Descargar certificado | {{ $student_data['name'] }} - {{ $student_data['activity']['name'] }} - {{
+			$student_data['validation_token'] }}
+		</span>
+	</button>
+	@endif
+
 </div>

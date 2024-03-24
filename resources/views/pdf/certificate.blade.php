@@ -75,7 +75,8 @@
 		El que suscribe <strong>{{ $student['activity']['user']['name'] }}</strong>, por este medio se permite hacer de
 		su
 		conocimiento que el (la)
-		estudiante <strong>{{ $student['name'] }}</strong>, con número de control <strong>{{ $student['key'] }}</strong> de
+		estudiante <strong>{{ $student['name'] }}</strong>, con número de control <strong>{{
+			$student['university_enrollment'] }}</strong> de
 		la
 		carrera de <strong>{{ $student['career']['name'] }}</strong>, ha cumplido su actividad Cultural y/o Deportiva de
 		<strong>{{ $student['activity']['name'] }}</strong> con un nivel de desempeño <strong>{{ $student['performance']
