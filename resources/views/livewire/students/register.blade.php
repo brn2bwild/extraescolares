@@ -16,9 +16,19 @@
 			@error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 		</div>
 		<div class="mb-2 w-full">
+			<label for="gender" class="text-neutral-50 block">Género</label>
+			<select wire:model="gender" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
+				<option value="">Selecciona una opción</option>
+				@foreach ($genders as $gender)
+				<option value="{{ $gender->value }}">{{ $gender->label() }}</option>
+				@endforeach
+			</select>
+			@error('gender') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+		</div>
+		<div class="mb-2 w-full">
 			<label for="career" class="text-neutral-50 block">Carrera</label>
 			<select wire:model="career" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
-				<option value="">Seleccione una opción</option>
+				<option value="">Selecciona una opción</option>
 				@foreach ($careers as $career)
 				<option value="{{ $career['id'] }}">{{ $career['name'] }}</option>
 				@endforeach
@@ -28,7 +38,7 @@
 		<div class="mb-2 w-full">
 			<label for="activity" class="text-neutral-50 block">Extraescolar</label>
 			<select wire:model="activity" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
-				<option value="">Seleccione una opción</option>
+				<option value="">Selecciona una opción</option>
 				@foreach ($activities as $activity)
 				<option value="{{ $activity['id'] }}">{{ $activity['name'] }}</option>
 				@endforeach
@@ -38,7 +48,7 @@
 		<div class="mb-2 w-full">
 			<label for="period" class="text-neutral-50 block">Periodo</label>
 			<select wire:model="period" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
-				<option value="">Seleccione una opción</option>
+				<option value="">Selecciona una opción</option>
 				@foreach ($periods as $period)
 				<option value="{{ $period['id'] }}">{{ $period['lapse'] }}</option>
 				@endforeach
@@ -49,7 +59,7 @@
 			<label for="illnes" class="text-neutral-50 block">¿Padeces alguna enfermedad crónica o degenerativa?</label>
 			<textarea wire:model="illnes" type="text" name="illnes"
 				class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none resize-none placeholder-black"
-				placeholder="En caso no padecer, escribir ninguna" rows="4" cols="50" required></textarea>
+				placeholder="En caso no padecer alguna enfermedad escribir ninguna" rows="4" cols="50" required></textarea>
 			@error('illnes') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 		</div>
 		<div class="w-full flex justify-center mt-8">

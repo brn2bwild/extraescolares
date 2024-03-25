@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Students;
 
+use App\Enums\Genders;
 use App\Models\Activity;
 use App\Models\Career;
 use App\Models\Period;
@@ -19,27 +20,32 @@ class Register extends Component
 	#[Validate(['unique:students,inscription_code'], message: ['unique' => 'El número de ficha ya ha sido registrado'])]
 	public $inscription_code;
 
-	#[Validate(['required'], message: ['required' => 'El campo nombre es requerido'])]
+	#[Validate(['required'], message: ['required' => 'Debes proporcionar tu nombre'])]
 	public $name;
 
-	#[Validate(['required'], message: ['required' => 'El campo carrera es requerido'])]
+	#[Validate(['required'], message: ['required' => 'Debes seleccionar una carrera'])]
 	public $career;
 
-	#[Validate(['required'], message: ['required' => 'El campo extraescolar es requerido'])]
+	#[Validate(['required'], message: ['required' => 'Debes seleccionar una actividad'])]
 	public $activity;
 
-	#[Validate(['required'], message: ['required' => 'El campo periodo es requerido'])]
+	#[Validate(['required'], message: ['required' => 'Debes seleccionar un periodo'])]
 	public $period;
 
-	#[Validate(['required'], message: ['required' => 'El campo periodo es requerido'])]
+	#[Validate(['required'], message: ['required' => 'Debes especificar tu estado de salud'])]
 	public $illnes;
+
+	#[Validate(['required'], message: ['required' => 'Debes seleccionar un género'])]
+	public $gender;
 
 	public $careers;
 	public $activities;
 	public $periods;
+	public $genders;
 
 	public function mount()
 	{
+		$this->genders = Genders::cases();
 		$this->careers = Career::get()->toArray();
 		$this->activities = Activity::get()
 			->filter(function ($activity) {
@@ -56,6 +62,7 @@ class Register extends Component
 		Student::create([
 			'inscription_code' => $this->inscription_code,
 			'name'  => $this->name,
+			'gender' => $this->gender,
 			'career_id' => $this->career,
 			'activity_id' => $this->activity,
 			'period_id' => $this->period,
@@ -83,6 +90,8 @@ class Register extends Component
 		$this->career = null;
 		$this->activity = null;
 		$this->period = null;
+		$this->gender = null;
+		$this->illnes = null;
 	}
 
 	public function render()

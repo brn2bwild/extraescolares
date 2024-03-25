@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources;
 
+use App\Enums\Genders;
 use App\Filament\Admin\Resources\StudentResource\Pages;
 use App\Filament\Admin\Resources\StudentResource\RelationManagers;
 use App\Models\Student;
@@ -10,6 +11,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -36,6 +38,15 @@ class StudentResource extends Resource
 				Forms\Components\Toggle::make('validated')
 					->required()
 					->label('Válido'),
+				Forms\Components\TextInput::make('name')
+					->required()
+					->maxLength(255)
+					->label('Nombre'),
+				Forms\Components\Select::make('gender')
+					->required()
+					->options(fn (): array => Genders::forSelect())
+					// ->formatStateUsing(fn (string|null $state): string => Genders::getLabel($state))
+					->label('Género'),
 				Forms\Components\Select::make('career_id')
 					->relationship('career', 'name')
 					->required()
@@ -55,14 +66,9 @@ class StudentResource extends Resource
 				Forms\Components\TextInput::make('university_enrollment')
 					->maxLength(255)
 					->label('Matrícula'),
-				Forms\Components\TextInput::make('name')
-					->required()
-					->maxLength(255)
-					->label('Nombre'),
 				Forms\Components\Textarea::make('illnes')
 					->rows(3)
 					->cols(10)
-					->readonly()
 					->maxLength(255)
 					->label('Enfermedades'),
 				// Forms\Components\DateTimePicker::make('validated_at')
@@ -75,6 +81,16 @@ class StudentResource extends Resource
 	{
 		return $table
 			->columns([
+				Tables\Columns\TextColumn::make('name')
+					->searchable()
+					->label('Nombre'),
+				Tables\Columns\TextColumn::make('gender')
+					->sortable()
+					->label('Género')
+					->getStateUsing(function (Model $record) {
+						return $record->gender->label();
+					})
+					->toggleable(isToggledHiddenByDefault: true),
 				Tables\Columns\TextColumn::make('activity.name')
 					->numeric()
 					->sortable()
@@ -89,11 +105,19 @@ class StudentResource extends Resource
 				Tables\Columns\TextColumn::make('university_enrollment')
 					->searchable()
 					->label('Matrícula'),
-				Tables\Columns\TextColumn::make('name')
-					->searchable()
-					->label('Nombre'),
 				Tables\Columns\TextColumn::make('illnes')
 					->searchable()
+					->limit(15)
+					->tooltip(function (TextColumn $column): ?string {
+						$state = $column->getState();
+
+						if (strlen($state) <= $column->getCharacterLimit()) {
+							return null;
+						}
+
+						// Only render the tooltip if the column content exceeds the length limit.
+						return $state;
+					})
 					->label('Enfermedades'),
 				Tables\Columns\TextColumn::make('evaluation_grade')
 					->label('Calificación')

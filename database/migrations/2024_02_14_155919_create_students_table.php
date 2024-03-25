@@ -16,6 +16,7 @@ return new class extends Migration
 			$table->string('inscription_code');
 			$table->string('university_enrollment')->nullable();
 			$table->string('name');
+			$table->string('gender')->max(1);
 			$table->foreignId('career_id')
 				->constrained('careers')
 				->cascadeOnDelete();

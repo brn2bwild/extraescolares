@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Genders;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,6 +17,7 @@ class Student extends Model
 		'inscription_code',
 		'university_enrollment',
 		'name',
+		'gender',
 		'activity_id',
 		'career_id',
 		'period_id',
@@ -25,6 +27,10 @@ class Student extends Model
 		'validated_by',
 		'validated_at',
 		'validation_token',
+	];
+
+	protected $casts = [
+		'gender' => Genders::class,
 	];
 
 	public function user(): HasOneThrough
