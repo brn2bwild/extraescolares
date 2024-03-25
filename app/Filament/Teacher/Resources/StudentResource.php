@@ -2,6 +2,7 @@
 
 namespace App\Filament\Teacher\Resources;
 
+use App\Enums\Genders;
 use App\Filament\Teacher\Resources\StudentResource\Pages;
 use App\Filament\Teacher\Resources\StudentResource\RelationManagers;
 use App\Models\Activity;
@@ -12,6 +13,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -38,6 +40,15 @@ class StudentResource extends Resource
 				Forms\Components\Toggle::make('validated')
 					->required()
 					->label('Válido'),
+				Forms\Components\TextInput::make('name')
+					->required()
+					->maxLength(255)
+					->label('Nombre'),
+				Forms\Components\Select::make('gender')
+					->required()
+					->options(fn (): array => Genders::forSelect())
+					// ->formatStateUsing(fn (string $state): string => Genders::getDescription($state))
+					->label('Género'),
 				Forms\Components\Select::make('career_id')
 					->relationship('career', 'name')
 					->required()
@@ -50,14 +61,13 @@ class StudentResource extends Resource
 					->relationship('period', 'lapse')
 					->required()
 					->label('Periodo'),
-				Forms\Components\TextInput::make('key')
+				Forms\Components\TextInput::make('inscription_code')
 					->required()
+					->maxLength(255)
+					->label('Número de ficha'),
+				Forms\Components\TextInput::make('university_enrollment')
 					->maxLength(255)
 					->label('Matrícula'),
-				Forms\Components\TextInput::make('name')
-					->required()
-					->maxLength(255)
-					->label('Nombre'),
 				Forms\Components\Textarea::make('illnes')
 					->rows(3)
 					->cols(20)
@@ -74,26 +84,93 @@ class StudentResource extends Resource
 	{
 		return $table
 			->columns([
-				Tables\Columns\TextColumn::make('career.name')
-					->numeric()
+				Tables\Columns\TextColumn::make('name')
+					->searchable()
+					->limit(15)
+					->tooltip(function (TextColumn $column): ?string {
+						$state = $column->getState();
+
+						if (strlen($state) <= $column->getCharacterLimit()) {
+							return null;
+						}
+
+						// Only render the tooltip if the column content exceeds the length limit.
+						return $state;
+					})
+					->label('Nombre'),
+				Tables\Columns\TextColumn::make('gender')
 					->sortable()
-					->label('Carrera'),
+					->label('Género')
+					->getStateUsing(function (Model $record) {
+						return $record->gender->label();
+					})
+					->limit(4)
+					->tooltip(function (TextColumn $column): ?string {
+						$state = $column->getState();
+
+						if (strlen($state) <= $column->getCharacterLimit()) {
+							return null;
+						}
+
+						// Only render the tooltip if the column content exceeds the length limit.
+						return $state;
+					})
+					->toggleable(isToggledHiddenByDefault: true),
 				Tables\Columns\TextColumn::make('activity.name')
 					->numeric()
 					->sortable()
+					->toggleable(isToggledHiddenByDefault: true)
 					->label('Actividad'),
+				Tables\Columns\TextColumn::make('career.name')
+					->numeric()
+					->sortable()
+					->limit(10)
+					->tooltip(function (TextColumn $column): ?string {
+						$state = $column->getState();
+
+						if (strlen($state) <= $column->getCharacterLimit()) {
+							return null;
+						}
+
+						// Only render the tooltip if the column content exceeds the length limit.
+						return $state;
+					})
+					->label('Carrera'),
+				Tables\Columns\TextColumn::make('inscription_code')
+					->searchable()
+					->label('Número de ficha'),
+				Tables\Columns\TextColumn::make('university_enrollment')
+					->searchable()
+					->limit(10)
+					->tooltip(function (TextColumn $column): ?string {
+						$state = $column->getState();
+
+						if (strlen($state) <= $column->getCharacterLimit()) {
+							return null;
+						}
+
+						// Only render the tooltip if the column content exceeds the length limit.
+						return $state;
+					})
+					->label('Matrícula'),
 				Tables\Columns\TextColumn::make('period.lapse')
 					->numeric()
 					->sortable()
+					->toggleable(isToggledHiddenByDefault: true)
 					->label('Periodo'),
-				Tables\Columns\TextColumn::make('key')
-					->searchable()
-					->label('Matrícula'),
-				Tables\Columns\TextColumn::make('name')
-					->searchable()
-					->label('Nombre'),
 				Tables\Columns\TextColumn::make('illnes')
 					->searchable()
+					->limit(15)
+					->tooltip(function (TextColumn $column): ?string {
+						$state = $column->getState();
+
+						if (strlen($state) <= $column->getCharacterLimit()) {
+							return null;
+						}
+
+						// Only render the tooltip if the column content exceeds the length limit.
+						return $state;
+					})
 					->label('Enfermedades'),
 				Tables\Columns\TextColumn::make('evaluation_grade')
 					->label('Calificación')
