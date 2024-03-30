@@ -20,14 +20,21 @@ class TestSeeder extends Seeder
 			'name' => 'Ing. Informática'
 		]);
 
-		Activity::create([
+		$activity = Activity::create([
 			'name' => 'Guitarra',
 			'capacity' => 50,
 			'user_id' => 1,
 		]);
 
-		Period::create([
+		$period = Period::create([
 			'lapse' => 'Enero - Junio 2024',
 		]);
+
+		$period2 = Period::create([
+			'lapse' => 'Julio - Dic 2024',
+		]);
+
+		$period->activities()->attach($activity);
+		$period2->activities()->attach($activity);
 	}
 }
