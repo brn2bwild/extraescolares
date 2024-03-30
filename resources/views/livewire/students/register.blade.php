@@ -18,7 +18,7 @@
 		<div class="mb-2 w-full">
 			<label for="gender" class="text-neutral-50 block">Género</label>
 			<select wire:model="gender" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
-				<option value="">Selecciona una opción</option>
+				<option value="" class="text-neutral-600">Selecciona una opción</option>
 				@foreach ($genders as $gender)
 				<option value="{{ $gender->value }}">{{ $gender->label() }}</option>
 				@endforeach
@@ -28,7 +28,7 @@
 		<div class="mb-2 w-full">
 			<label for="career" class="text-neutral-50 block">Carrera</label>
 			<select wire:model="career" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
-				<option value="">Selecciona una opción</option>
+				<option value="" class="text-neutral-600">Selecciona una opción</option>
 				@foreach ($careers as $career)
 				<option value="{{ $career['id'] }}">{{ $career['name'] }}</option>
 				@endforeach
@@ -36,9 +36,24 @@
 			@error('career') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 		</div>
 		<div class="mb-2 w-full">
+			<label for="period" class="text-neutral-50 block">Periodo</label>
+			<div class="flex justify-between items-center">
+				<select wire:change="searchPeriod" wire:model="period"
+					class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
+					<option value="" class="text-neutral-600">Selecciona una opción</option>
+					@foreach ($periods as $period)
+					<option value="{{ $period['id'] }}">{{ $period['lapse'] }}</option>
+					@endforeach
+				</select>
+				<img wire:loading wire:target="searchPeriod" src="/storage/images/spinner.svg" alt="spinner"
+					class="rounded-md h-8 bg-white">
+			</div>
+			@error('period') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+		</div>
+		<div class="mb-2 w-full">
 			<label for="activity" class="text-neutral-50 block">Extraescolar</label>
 			<select wire:model="activity" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
-				<option value="">Selecciona una opción</option>
+				<option value="" class="text-neutral-600">Selecciona una opción</option>
 				@foreach ($activities as $activity)
 				<option value="{{ $activity['id'] }}">{{ $activity['name'] }}</option>
 				@endforeach
@@ -46,26 +61,16 @@
 			@error('activity') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 		</div>
 		<div class="mb-2 w-full">
-			<label for="period" class="text-neutral-50 block">Periodo</label>
-			<select wire:model="period" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
-				<option value="">Selecciona una opción</option>
-				@foreach ($periods as $period)
-				<option value="{{ $period['id'] }}">{{ $period['lapse'] }}</option>
-				@endforeach
-			</select>
-			@error('period') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-		</div>
-		<div class="mb-2 w-full">
 			<label for="illnes" class="text-neutral-50 block">¿Padeces alguna enfermedad crónica o degenerativa?</label>
 			<textarea wire:model="illnes" type="text" name="illnes"
-				class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none resize-none placeholder-black"
+				class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none resize-none placeholder-neutral-500"
 				placeholder="En caso no padecer alguna enfermedad escribir ninguna" rows="4" cols="50" required></textarea>
 			@error('illnes') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 		</div>
 		<div class="w-full flex justify-center mt-8">
 			<button type="submit"
 				class="bg-neutral-50 rounded-xl px-4 py-2 font-medium text-blue-950 flex items-center justify-between">
-				<img wire:loading class="h-4 mr-2" src="/storage/images/spinner.svg" alt="spinner">
+				<img wire:loading wire:target="saveData" class="h-4 mr-2" src="/storage/images/spinner.svg" alt="spinner">
 				Registrarse
 			</button>
 		</div>

@@ -16,7 +16,7 @@ class Register extends Component
 	use Toast;
 
 	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
-	#[Validate(['regex:/^\d{14,16}$/'], message: ['regex' => 'El número de ficha no tiene el formato deseado'])]
+	#[Validate(['regex:/^\d{14,16}$/'], message: ['regex' => 'Debes introducir un número de ficha válido'])]
 	#[Validate(['unique:students,inscription_code'], message: ['unique' => 'El número de ficha ya ha sido registrado'])]
 	public $inscription_code;
 
@@ -45,14 +45,10 @@ class Register extends Component
 
 	public function mount()
 	{
+		$this->activities = [];
 		$this->genders = Genders::cases();
 		$this->careers = Career::get()->toArray();
-		$this->activities = Activity::get()
-			->filter(function ($activity) {
-				if (Student::where('activity_id', $activity->id)->count() < $activity->capacity) return $activity;
-			})
-			->toArray();
-		$this->periods = Period::orderByDesc('id')->get()->toArray();
+		$this->periods = Period::orderByDesc('id')->orderBy('created_at', 'desc')->get()->toArray();
 	}
 
 	public function saveData()
@@ -92,6 +88,19 @@ class Register extends Component
 		$this->period = null;
 		$this->gender = null;
 		$this->illnes = null;
+	}
+
+	public function searchPeriod()
+	{
+		$this->activities = Activity::with('periods')
+			->whereHas('periods', function ($query) {
+				$query->where('period_id', $this->period);
+			})
+			->get()
+			->filter(function ($activity) {
+				if ((Student::where('activity_id', $activity->id)->count() < $activity->capacity)) return $activity;
+			})
+			->toArray();
 	}
 
 	public function render()
