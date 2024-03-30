@@ -31,6 +31,7 @@ class Student extends Model
 
 	protected $casts = [
 		'gender' => Genders::class,
+		'validated' => 'boolean',
 	];
 
 	public function user(): HasOneThrough
