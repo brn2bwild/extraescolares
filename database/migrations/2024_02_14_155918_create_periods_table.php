@@ -18,8 +18,12 @@ return new class extends Migration
 		});
 
 		Schema::create('activity_period', function (Blueprint $table) {
-			$table->foreignId('activity_id');
-			$table->foreignId('period_id');
+			$table->foreignId('activity_id')
+				->constrained('activities')
+				->cascadeOnDelete();
+			$table->foreignId('period_id')
+				->constrained('periods')
+				->cascadeOnDelete();
 		});
 	}
 
@@ -29,5 +33,6 @@ return new class extends Migration
 	public function down(): void
 	{
 		Schema::dropIfExists('periods');
+		Schema::dropIfExists('activity_period');
 	}
 };
