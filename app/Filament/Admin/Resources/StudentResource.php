@@ -9,6 +9,7 @@ use App\Models\Student;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -35,8 +36,9 @@ class StudentResource extends Resource
 	{
 		return $form
 			->schema([
-				Forms\Components\Toggle::make('validated')
-					->required()
+				Forms\Components\Checkbox::make('validated')
+					->requiredWith('university_enrollment')
+					->inline()
 					->label('Válido'),
 				Forms\Components\TextInput::make('name')
 					->required()
@@ -61,10 +63,17 @@ class StudentResource extends Resource
 					->label('Periodo'),
 				Forms\Components\TextInput::make('inscription_code')
 					->required()
-					->maxLength(255)
+					->maxLength(16)
+					->numeric()
 					->label('Número de ficha'),
 				Forms\Components\TextInput::make('university_enrollment')
-					->maxLength(255)
+					->unique(ignoreRecord: true)
+					->regex('/^\d{2}[A-Z]\d{5}$/')
+					->validationMessages([
+						'unique' => 'El número de matrícula ya existe',
+						'regex' => 'La matrícula debe tener el formato 00E00000',
+					])
+					->maxLength(8)
 					->label('Matrícula'),
 				Forms\Components\Textarea::make('illnes')
 					->rows(3)
@@ -127,12 +136,44 @@ class StudentResource extends Resource
 					}),
 				Tables\Columns\CheckboxColumn::make('validated')
 					->label('Válido')
-					->beforeStateUpdated(function ($record, $state) {
-						$record->update([
-							'validated_by' => Auth::user()->name,
-							'validated_at' => Carbon::now(),
-							'validation_token' => Str::random(32),
-						]);
+					->updateStateUsing(function ($record, $state) {
+						if ($record->university_enrollment !== null && $state === true) {
+							$record->update([
+								'validated' => $state,
+								'validated_by' => Auth::user()->name,
+								'validated_at' => Carbon::now(),
+								'validation_token' => Str::random(32)
+							]);
+							Notification::make()
+								->title('Validación actualizada')
+								->success()
+								->body('Se ha validado al alumno correctamente')
+								->send();
+						}
+
+						if ($record->university_enrollment !== null && $state === false) {
+							$state = false;
+							$record->update([
+								'validated' => $state,
+								'validated_by' => null,
+								'validated_at' => null,
+								'validation_token' => null
+							]);
+
+							Notification::make()
+								->title('Validación actualizada')
+								->success()
+								->body('Se quitado la validación al alumno correctamente')
+								->send();
+						}
+
+						if ($record->university_enrollment === null) {
+							Notification::make()
+								->title('Error en la validación')
+								->danger()
+								->body('No se ha podido validar al alumno, verifique que cuenta con un número de matrícula')
+								->send();
+						}
 					}),
 				Tables\Columns\TextColumn::make('validated_by')
 					->searchable()

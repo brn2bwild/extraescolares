@@ -12,10 +12,15 @@ class EditStudent extends EditRecord
 {
 	protected static string $resource = StudentResource::class;
 
+	protected function getRedirectUrl(): string
+	{
+		return $this->previousUrl ?? $this->getResource()::getUrl('index');
+	}
+
 	protected function handleRecordUpdate(Model $record, array $data): Model
 	{
-		// $data['gender'] = Genders::setGender($data['gender']);
-		// dd($data['gender']);
+		if ($data['university_enrollment'] === null) $data['validated'] = false;
+
 		$record->update($data);
 
 		return $record;

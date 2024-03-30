@@ -12,10 +12,14 @@ class CreateStudent extends CreateRecord
 {
 	protected static string $resource = StudentResource::class;
 
+	protected function getRedirectUrl(): string
+	{
+		return $this->previousUrl ?? $this->getResource()::getUrl('index');
+	}
+
 	protected function handleRecordCreation(array $data): Model
 	{
 		// $data['gender'] = Genders::setGender($data['gender']);
-
 		return static::getModel()::create($data);
 	}
 }
