@@ -43,6 +43,7 @@ return new class extends Migration
 			$table->string('validated_by')->nullable();
 			$table->timestamp('validated_at')->nullable();
 			$table->string('validation_token', 32)->nullable()->unique();
+			$table->boolean('certificate_downloaded')->default(false);
 			$table->timestamps();
 		});
 	}

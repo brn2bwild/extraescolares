@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Enums\Genders;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use SebastianBergmann\Type\NullType;
 
 class Student extends Model
 {
@@ -27,6 +30,7 @@ class Student extends Model
 		'validated_by',
 		'validated_at',
 		'validation_token',
+		'certificate_downloaded',
 	];
 
 	protected $casts = [
@@ -52,6 +56,27 @@ class Student extends Model
 	public function activity(): BelongsTo
 	{
 		return $this->belongsTo(Activity::class);
+	}
+
+	public function setValidated(bool $value): bool | null
+	{
+		if ($this->university_enrollment === null) return null;
+
+		return $this->update([
+			'validated' => $value,
+			'validated_by' => ($value) ? Auth::user()->name : null,
+			'validated_at' => ($value) ? Carbon::now() : null,
+			'validation_token' => ($value) ? Str::random(32) : null,
+		]);
+	}
+
+	public function setCertificateDownloaded(bool  $value): bool | null
+	{
+		if ($this->university_enrollment === null || $this->validated === false) return null;
+
+		return $this->update([
+			'certificate_downloaded' => $value,
+		]);
 	}
 
 	public function genereateValidationToken(): String
