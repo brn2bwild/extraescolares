@@ -6,13 +6,15 @@ use App\Models\Student;
 use Carbon\Carbon;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
-
+use Mary\Traits\Toast;
 use PDF;
 
 use function Termwind\render;
 
 class Certificate extends Component
 {
+	use Toast;
+
 	#[Validate(['required'], message: ['required' => 'Debes escribir un número de ficha o matrícula'])]
 	public $search = null;
 
@@ -27,7 +29,7 @@ class Certificate extends Component
 			->with('career')
 			->with('period')
 			->where('validated', true)
-			->where('inscription_code', $this->search)
+			// ->where('inscription_code', $this->search)
 			->orWhere('university_enrollment', $this->search)
 			->orWhere('validation_token', $this->search)
 			->first();
@@ -43,14 +45,30 @@ class Certificate extends Component
 
 	public function downloadPdf()
 	{
-		view()->share('student', $this->student_data);
-		$pdf = PDF::loadView('pdf.certificate', $this->student_data)
-			->setPaper('letter', 'portrait')
-			->output();
+		$student = Student::findOrFail($this->student_data['id']);
+		if ($student->certificate_downloaded === false) {
+			view()->share('student', $this->student_data);
+			$pdf = PDF::loadView('pdf.certificate', $this->student_data)
+				->setPaper('letter', 'portrait')
+				->output();
 
-		return response()->streamDownload(
-			fn () => print($pdf),
-			strtolower(str_replace(" ", "_", $this->student_data['name'])) . "_certificate.pdf"
+			$student->setCertificateDownloaded(true);
+
+			return response()->streamDownload(
+				fn () => print($pdf),
+				strtolower(str_replace(" ", "_", $this->student_data['name'])) . "_certificate.pdf"
+			);
+		}
+
+		$this->toast(
+			type: 'warning',
+			title: 'Descarga de constancia',
+			description: 'La constancia ya ha sido descargada, para descargar una nueva solicitar en el área correspondiente',                  			// optional (text)
+			position: 'toast-bottom toast-end',    	// optional (daisyUI classes)
+			icon: 'o-x-circle',       					// Optional (any icon)
+			css: 'alert-success',                  	// Optional (daisyUI classes)
+			timeout: 3000,                      		// optional (ms)
+			redirectTo: null                    		// optional (uri)
 		);
 	}
 

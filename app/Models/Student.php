@@ -36,6 +36,7 @@ class Student extends Model
 	protected $casts = [
 		'gender' => Genders::class,
 		'validated' => 'boolean',
+		'certificate_downloaded' => 'boolean',
 	];
 
 	public function user(): HasOneThrough
@@ -73,7 +74,7 @@ class Student extends Model
 	public function setCertificateDownloaded(bool  $value): bool | null
 	{
 		if ($this->university_enrollment === null || $this->validated === false) return null;
-
+		
 		return $this->update([
 			'certificate_downloaded' => $value,
 		]);

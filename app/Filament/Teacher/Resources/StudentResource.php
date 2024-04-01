@@ -188,41 +188,20 @@ class StudentResource extends Resource
 				Tables\Columns\CheckboxColumn::make('validated')
 					->label('Válido')
 					->updateStateUsing(function ($record, $state) {
-						if ($record->university_enrollment !== null && $state === true) {
-							$record->update([
-								'validated' => $state,
-								'validated_by' => Auth::user()->name,
-								'validated_at' => Carbon::now(),
-								'validation_token' => Str::random(32)
-							]);
-							Notification::make()
-								->title('Validación actualizada')
-								->success()
-								->body('Se ha validado al alumno correctamente')
-								->send();
-						}
-
-						if ($record->university_enrollment !== null && $state === false) {
-							$state = false;
-							$record->update([
-								'validated' => $state,
-								'validated_by' => null,
-								'validated_at' => null,
-								'validation_token' => null
-							]);
-
-							Notification::make()
-								->title('Validación actualizada')
-								->success()
-								->body('Se quitado la validación al alumno correctamente')
-								->send();
-						}
-
-						if ($record->university_enrollment === null) {
+						$university_enrollment = $record->setValidated($state);
+						if ($university_enrollment === false || $university_enrollment === null) {
 							Notification::make()
 								->title('Error en la validación')
 								->danger()
 								->body('No se ha podido validar al alumno, verifique que cuenta con un número de matrícula')
+								->send();
+						}
+
+						if ($university_enrollment) {
+							Notification::make()
+								->title('Validación actualizada')
+								->success()
+								->body(($state) ? 'Se ha validado al alumno correctamente' : 'Se ha quitado la validación al alumno correctamente')
 								->send();
 						}
 					}),
