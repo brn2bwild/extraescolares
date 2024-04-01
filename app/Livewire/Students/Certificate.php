@@ -29,8 +29,7 @@ class Certificate extends Component
 			->with('career')
 			->with('period')
 			->where('validated', true)
-			// ->where('inscription_code', $this->search)
-			->orWhere('university_enrollment', $this->search)
+			->Where('university_enrollment', $this->search)
 			->orWhere('validation_token', $this->search)
 			->first();
 
