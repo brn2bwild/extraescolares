@@ -329,7 +329,7 @@ class StudentResource extends Resource
 				Tables\Actions\Action::make('printEvaluation')
 					->label('Notas')
 					->url(fn (Student $record): string => route('admin.student_grades', $record)),
-				Tables\Actions\EditAction::make(),
+				// Tables\Actions\EditAction::make(),
 			])
 			->bulkActions([
 				Tables\Actions\BulkActionGroup::make([
