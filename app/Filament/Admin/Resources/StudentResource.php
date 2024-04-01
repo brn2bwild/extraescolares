@@ -134,44 +134,43 @@ class StudentResource extends Resource
 						$data = $record->getEvaluationPoints();
 						return $data;
 					}),
+				Tables\Columns\CheckboxColumn::make('certificate_downloaded')
+					->label('Descarga constancia')
+					->updateStateUsing(function ($record, $state) {
+						$certificate_downloaded = $record->setCertificateDownloaded($state);
+						if ($certificate_downloaded === false || $certificate_downloaded === null) {
+							Notification::make()
+								->title('Descarga de constancia')
+								->danger()
+								->body('No se ha podido habilitar la descarga de la constancia para el alumno, verifique que cuente con número de matrícula y esté validado')
+								->send();
+						}
+						if ($certificate_downloaded) {
+							Notification::make()
+								->title('Descarga de constancia')
+								->success()
+								->body(($state) ? 'El alumno ha descargado su constancia, para descargar nuevamente deberá pagar una nueva' : 'El alumno puede descargar su constancia una sóla vez')
+								->send();
+						}
+					})
+					->toggleable(isToggledHiddenByDefault: true),
 				Tables\Columns\CheckboxColumn::make('validated')
 					->label('Válido')
 					->updateStateUsing(function ($record, $state) {
-						if ($record->university_enrollment !== null && $state === true) {
-							$record->update([
-								'validated' => $state,
-								'validated_by' => Auth::user()->name,
-								'validated_at' => Carbon::now(),
-								'validation_token' => Str::random(32)
-							]);
-							Notification::make()
-								->title('Validación actualizada')
-								->success()
-								->body('Se ha validado al alumno correctamente')
-								->send();
-						}
-
-						if ($record->university_enrollment !== null && $state === false) {
-							$state = false;
-							$record->update([
-								'validated' => $state,
-								'validated_by' => null,
-								'validated_at' => null,
-								'validation_token' => null
-							]);
-
-							Notification::make()
-								->title('Validación actualizada')
-								->success()
-								->body('Se quitado la validación al alumno correctamente')
-								->send();
-						}
-
-						if ($record->university_enrollment === null) {
+						$university_enrollment = $record->setValidated($state);
+						if ($university_enrollment === false || $university_enrollment === null) {
 							Notification::make()
 								->title('Error en la validación')
 								->danger()
 								->body('No se ha podido validar al alumno, verifique que cuenta con un número de matrícula')
+								->send();
+						}
+
+						if ($university_enrollment) {
+							Notification::make()
+								->title('Validación actualizada')
+								->success()
+								->body(($state) ? 'Se ha validado al alumno correctamente' : 'Se ha quitado la validación al alumno correctamente')
 								->send();
 						}
 					}),
