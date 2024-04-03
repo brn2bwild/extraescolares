@@ -55,28 +55,41 @@ class Register extends Component
 	{
 		$this->validate();
 
-		Student::create([
-			'inscription_code' => $this->inscription_code,
-			'name'  => $this->name,
-			'gender' => $this->gender,
-			'career_id' => $this->career,
-			'activity_id' => $this->activity,
-			'period_id' => $this->period,
-			'illnes' => $this->illnes,
-		]);
+		if (Student::where('activity_id', $this->activity)->count() < Activity::where('id', $this->activity)->first()->capacity) {
+			Student::create([
+				'inscription_code' => $this->inscription_code,
+				'name'  => $this->name,
+				'gender' => $this->gender,
+				'career_id' => $this->career,
+				'activity_id' => $this->activity,
+				'period_id' => $this->period,
+				'illnes' => $this->illnes,
+			]);
 
-		$this->toast(
-			type: 'success',
-			title: 'Registro guardado',
-			description: null,                  // optional (text)
-			position: 'toast-bottom toast-end',    // optional (daisyUI classes)
-			icon: 'o-check-circle',       // Optional (any icon)
-			css: 'alert-success',                  // Optional (daisyUI classes)
-			timeout: 3000,                      // optional (ms)
-			redirectTo: null                    // optional (uri)
-		);
+			$this->toast(
+				type: 'success',
+				title: 'Registro guardado',
+				description: null,                  // optional (text)
+				position: 'toast-bottom toast-end',    // optional (daisyUI classes)
+				icon: 'o-check-circle',       // Optional (any icon)
+				css: 'alert-success',                  // Optional (daisyUI classes)
+				timeout: 3000,                      // optional (ms)
+				redirectTo: null                    // optional (uri)
+			);
 
-		$this->clearData();
+			$this->clearData();
+		} else {
+			$this->toast(
+				type: 'warning',
+				title: 'Error al registrarte',
+				description: 'Al parecer no hay espacios disponibles para la actividad a la que te deseas inscribir',                  // optional (text)
+				position: 'toast-bottom toast-end',    // optional (daisyUI classes)
+				icon: 'c-exclamation-circle',       // Optional (any icon)
+				css: 'alert-success',                  // Optional (daisyUI classes)
+				timeout: 4000,                      // optional (ms)
+				redirectTo: null                    // optional (uri)
+			);
+		}
 	}
 
 	public function clearData()

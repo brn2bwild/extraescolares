@@ -18,6 +18,7 @@ class EditStudent extends EditRecord
 
 	protected function handleRecordUpdate(Model $record, array $data): Model
 	{
+		// Si el alumno no tiene matrícula la validación no se permite
 		if ($data['university_enrollment'] === null) $data['validated'] = false;
 
 		$record->update($data);
