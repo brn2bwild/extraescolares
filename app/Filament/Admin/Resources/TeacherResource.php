@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\TeacherResource\Pages;
 use App\Filament\Admin\Resources\TeacherResource\RelationManagers;
+use App\Models\Activity;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
@@ -41,6 +42,15 @@ class TeacherResource extends Resource
 					->email()
 					->unique(ignoreRecord: true)
 					->maxLength(255),
+				Forms\Components\Select::make('activities')
+					->options(Activity::all()->pluck('name', 'id'))
+					->relationship(
+						name: 'activities',
+						titleAttribute: 'name',
+					)
+					->preload()
+					->multiple()
+					->label('Actividad(es)'),
 				Forms\Components\TextInput::make('password')
 					->label('Contraseña')
 					->required()
@@ -68,6 +78,10 @@ class TeacherResource extends Resource
 				Tables\Columns\TextColumn::make('email')
 					->label('Correo electrónico')
 					->searchable(),
+				Tables\Columns\TextColumn::make('activities.name')
+					->badge()
+					->color('success')
+					->label('Actividad(es)'),
 				Tables\Columns\TextColumn::make('created_at')
 					->dateTime()
 					->sortable()

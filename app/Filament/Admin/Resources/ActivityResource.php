@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\ActivityResource\Pages;
 use App\Filament\Admin\Resources\ActivityResource\RelationManagers;
 use App\Models\Activity;
+use App\Models\Period;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -38,6 +39,14 @@ class ActivityResource extends Resource
 					->label('Nombre')
 					->required()
 					->maxLength(255),
+				Forms\Components\Select::make('periods')
+					->multiple()
+					->relationship(
+						name: 'periods',
+						titleAttribute: 'lapse'
+					)
+					->options(Period::all()->pluck('lapse', 'id'))
+					->label('Periodo(s)'),
 				Forms\Components\TextInput::make('capacity')
 					->label('Capacidad')
 					->required()
@@ -59,6 +68,10 @@ class ActivityResource extends Resource
 					->label('Capacidad')
 					->numeric()
 					->sortable(),
+				Tables\Columns\TextColumn::make('periods.lapse')
+					->badge()
+					->color('success')
+					->label('Periodo(s)'),
 				Tables\Columns\TextColumn::make('created_at')
 					->dateTime()
 					->sortable()

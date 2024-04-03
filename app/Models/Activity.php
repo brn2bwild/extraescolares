@@ -23,8 +23,8 @@ class Activity extends Model
 		return $this->belongsToMany(Period::class);
 	}
 
-	public function user(): BelongsTo
+	public function user(): BelongsToMany
 	{
-		return $this->belongsTo(User::class);
+		return $this->belongsToMany(User::class);
 	}
 }
