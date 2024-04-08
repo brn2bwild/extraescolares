@@ -46,6 +46,7 @@ class Certificate extends Component
 	{
 		$student = Student::findOrFail($this->student_data['id']);
 		if ($student->certificate_downloaded === false) {
+			// dd($this->student_data);
 			view()->share('student', $this->student_data);
 			$pdf = PDF::loadView('pdf.certificate', $this->student_data)
 				->setPaper('letter', 'portrait')
