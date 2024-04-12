@@ -11,9 +11,9 @@
 		<h1 class="text-8xl text-blue-950 font-bold text-center">Departamento de difusión y concertación</h1>
 		<div class="flex justify-evenly w-2/3 mt-12">
 			<a wire:navigate rel="stylesheet" href="/students/register"
-				class="rounded-xl border-blue-950 border-2 px-10 py-2 font-medium">Registrarse</a>
+				class="rounded-xl border-blue-800 border-2 px-10 py-2 font-medium">Registrarse</a>
 			<a wire:navigate rel="stylesheet" href="/students/certificate"
-				class="rounded-xl bg-blue-950 px-10 py-2 text-neutral-50 font-medium">Constancias</a>
+				class="rounded-xl bg-blue-400 px-10 py-2 text-neutral-50 font-medium">Constancias</a>
 		</div>
 	</div>
 </div>
