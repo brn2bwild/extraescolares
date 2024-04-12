@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Career;
 use App\Models\Period;
 use App\Models\Teacher;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -20,14 +21,25 @@ class TestSeeder extends Seeder
 			'name' => 'Ing. Informática'
 		]);
 
-		Activity::create([
+		$activity = Activity::create([
 			'name' => 'Guitarra',
 			'capacity' => 50,
 			'user_id' => 1,
 		]);
 
-		Period::create([
+		$period = Period::create([
 			'lapse' => 'Enero - Junio 2024',
 		]);
+
+		$period2 = Period::create([
+			'lapse' => 'Julio - Dic 2024',
+		]);
+
+		
+		$period->activities()->attach($activity);
+		$period2->activities()->attach($activity);
+		
+		$teacher = User::where('email', 'teacher@example.com')->first();
+		$teacher->activities()->attach($activity);
 	}
 }

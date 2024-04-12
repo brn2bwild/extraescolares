@@ -6,48 +6,69 @@ use App\Models\Student;
 use Carbon\Carbon;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
-
+use Mary\Traits\Toast;
 use PDF;
 
 use function Termwind\render;
 
 class Certificate extends Component
 {
-	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
+	use Toast;
+
+	#[Validate(['required'], message: ['required' => 'Debes escribir un número de ficha o matrícula'])]
 	public $search = null;
 
-	public $student = null;
+	public $student_data = null;
 
 	public function searchData()
 	{
+		$this->student_data = null;
+
 		$student = Student::with('activity')
 			->with('activity.user')
 			->with('career')
 			->with('period')
 			->where('validated', true)
-			->where('key', $this->search)
+			->Where('university_enrollment', $this->search)
 			->orWhere('validation_token', $this->search)
 			->first();
 
-			if(isset($student)){
-				$this->student = $student->toArray();
-				$this->student['points'] = $student->getEvaluationPoints();
-				$this->student['performance'] = $student->getEvaluationPerformance();
-				$date = Carbon::createFromDate($this->student['validated_at']);
-				$this->student['validated_at'] = $date->isoFormat('D MMMM YYYY');
-			}
+		if (isset($student)) {
+			$this->student_data = $student->toArray();
+			$this->student_data['points'] = $student->getEvaluationPoints();
+			$this->student_data['performance'] = $student->getEvaluationPerformance();
+			$date = Carbon::createFromDate($student->validated_at);
+			$this->student_data['validated_at'] = $date->isoFormat('D MMMM YYYY');
+		}
 	}
 
 	public function downloadPdf()
 	{
-		view()->share('student', $this->student);
-		$pdf = PDF::loadView('pdf.certificate', $this->student)
-			->setPaper('letter', 'portrait')
-			->output();
+		$student = Student::findOrFail($this->student_data['id']);
+		if ($student->certificate_downloaded === false) {
+			// dd($this->student_data);
+			view()->share('student', $this->student_data);
+			$pdf = PDF::loadView('pdf.certificate', $this->student_data)
+				->setPaper('letter', 'portrait')
+				->output();
 
-		return response()->streamDownload(
-			fn () => print($pdf),
-			strtolower(str_replace(" ", "_", $this->student['name'])) . "_certificate.pdf"
+			$student->setCertificateDownloaded(true);
+
+			return response()->streamDownload(
+				fn () => print($pdf),
+				strtolower(str_replace(" ", "_", $this->student_data['name'])) . "_certificate.pdf"
+			);
+		}
+
+		$this->toast(
+			type: 'warning',
+			title: 'Descarga de constancia',
+			description: 'La constancia ya ha sido descargada, para descargar una nueva solicitar en el área correspondiente',                  			// optional (text)
+			position: 'toast-bottom toast-end',    	// optional (daisyUI classes)
+			icon: 'o-x-circle',       					// Optional (any icon)
+			css: 'alert-success',                  	// Optional (daisyUI classes)
+			timeout: 3000,                      		// optional (ms)
+			redirectTo: null                    		// optional (uri)
 		);
 	}
 

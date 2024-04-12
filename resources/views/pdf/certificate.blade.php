@@ -72,10 +72,11 @@
 	<img class="image-background" src="{{ storage_path('certificate/template.jpg') }}" alt="template">
 	{{-- <h2>{{ $student['name'] }}</h2> --}}
 	<p class="text">
-		El que suscribe <strong>{{ $student['activity']['user']['name'] }}</strong>, por este medio se permite hacer de
+		El que suscribe <strong>{{ $student['activity']['user'][0]['name'] }}</strong>, por este medio se permite hacer de
 		su
 		conocimiento que el (la)
-		estudiante <strong>{{ $student['name'] }}</strong>, con número de control <strong>{{ $student['key'] }}</strong> de
+		estudiante <strong>{{ $student['name'] }}</strong>, con número de control <strong>{{
+			$student['university_enrollment'] }}</strong> de
 		la
 		carrera de <strong>{{ $student['career']['name'] }}</strong>, ha cumplido su actividad Cultural y/o Deportiva de
 		<strong>{{ $student['activity']['name'] }}</strong> con un nivel de desempeño <strong>{{ $student['performance']
@@ -85,7 +86,7 @@
 		con un valor curricular de 2 créditos.<br><br>
 		Se extiende la presente en la ciudad de Teapa Tabasco; con fecha de <strong>{{ $student['validated_at'] }}</strong>.
 	</p>
-	<span class="user">{{ $student['activity']['user']['name'] }}</span>
+	<span class="user">{{ $student['activity']['user'][0]['name'] }}</span>
 	<p class="token">{{ $student['validation_token'] }}</p>
 </body>
 

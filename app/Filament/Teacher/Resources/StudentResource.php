@@ -2,6 +2,7 @@
 
 namespace App\Filament\Teacher\Resources;
 
+use App\Enums\Genders;
 use App\Filament\Teacher\Resources\StudentResource\Pages;
 use App\Filament\Teacher\Resources\StudentResource\RelationManagers;
 use App\Models\Activity;
@@ -10,8 +11,10 @@ use App\Models\User;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Exists;
 
 
 class StudentResource extends Resource
@@ -35,6 +39,19 @@ class StudentResource extends Resource
 	{
 		return $form
 			->schema([
+				Forms\Components\Checkbox::make('validated')
+					->requiredWith('university_enrollment')
+					->inline()
+					->label('Válido'),
+				Forms\Components\TextInput::make('name')
+					->required()
+					->maxLength(255)
+					->label('Nombre'),
+				Forms\Components\Select::make('gender')
+					->required()
+					->options(fn (): array => Genders::forSelect())
+					// ->formatStateUsing(fn (string $state): string => Genders::getDescription($state))
+					->label('Género'),
 				Forms\Components\Select::make('career_id')
 					->relationship('career', 'name')
 					->required()
@@ -47,24 +64,26 @@ class StudentResource extends Resource
 					->relationship('period', 'lapse')
 					->required()
 					->label('Periodo'),
-				Forms\Components\TextInput::make('key')
+				Forms\Components\TextInput::make('inscription_code')
 					->required()
-					->maxLength(255)
+					->maxLength(16)
+					->numeric()
+					->label('Número de ficha'),
+				Forms\Components\TextInput::make('university_enrollment')
+					->unique(ignoreRecord: true)
+					->regex('/^\d{2}[A-Z]\d{5}$/')
+					->validationMessages([
+						'unique' => 'El número de matrícula ya existe',
+						'regex' => 'La matrícula debe tener el formato 00E00000',
+					])
+					->maxLength(8)
 					->label('Matrícula'),
-				Forms\Components\TextInput::make('name')
-					->required()
+				Forms\Components\Textarea::make('illnes')
+					->rows(3)
+					->cols(20)
+					->readonly()
 					->maxLength(255)
-					->label('Nombre'),
-				Forms\Components\Toggle::make('validated')
-					->required()
-					->label('Validado'),
-				Forms\Components\TextInput::make('validated_by')
-					->required()
-					->maxLength(255)
-					->label('Validado por'),
-				Forms\Components\DateTimePicker::make('validated_at')
-					->required()
-					->label('Fecha de validación'),
+					->label('Enfermedades'),
 			]);
 	}
 
@@ -72,24 +91,94 @@ class StudentResource extends Resource
 	{
 		return $table
 			->columns([
-				Tables\Columns\TextColumn::make('career.name')
-					->numeric()
+				Tables\Columns\TextColumn::make('name')
+					->searchable()
+					->limit(15)
+					->tooltip(function (TextColumn $column): ?string {
+						$state = $column->getState();
+
+						if (strlen($state) <= $column->getCharacterLimit()) {
+							return null;
+						}
+
+						// Only render the tooltip if the column content exceeds the length limit.
+						return $state;
+					})
+					->label('Nombre'),
+				Tables\Columns\TextColumn::make('gender')
 					->sortable()
-					->label('Carrera'),
+					->label('Género')
+					->getStateUsing(function (Model $record) {
+						return $record->gender->label();
+					})
+					->limit(4)
+					->tooltip(function (TextColumn $column): ?string {
+						$state = $column->getState();
+
+						if (strlen($state) <= $column->getCharacterLimit()) {
+							return null;
+						}
+
+						// Only render the tooltip if the column content exceeds the length limit.
+						return $state;
+					})
+					->toggleable(isToggledHiddenByDefault: true),
 				Tables\Columns\TextColumn::make('activity.name')
 					->numeric()
 					->sortable()
+					->toggleable(isToggledHiddenByDefault: true)
 					->label('Actividad'),
+				Tables\Columns\TextColumn::make('career.name')
+					->numeric()
+					->sortable()
+					->limit(10)
+					->tooltip(function (TextColumn $column): ?string {
+						$state = $column->getState();
+
+						if (strlen($state) <= $column->getCharacterLimit()) {
+							return null;
+						}
+
+						// Only render the tooltip if the column content exceeds the length limit.
+						return $state;
+					})
+					->label('Carrera'),
+				Tables\Columns\TextColumn::make('inscription_code')
+					->searchable()
+					->label('Número de ficha'),
+				Tables\Columns\TextColumn::make('university_enrollment')
+					->searchable()
+					->limit(10)
+					->tooltip(function (TextColumn $column): ?string {
+						$state = $column->getState();
+
+						if (strlen($state) <= $column->getCharacterLimit()) {
+							return null;
+						}
+
+						// Only render the tooltip if the column content exceeds the length limit.
+						return $state;
+					})
+					->label('Matrícula'),
 				Tables\Columns\TextColumn::make('period.lapse')
 					->numeric()
 					->sortable()
+					->toggleable(isToggledHiddenByDefault: true)
 					->label('Periodo'),
-				Tables\Columns\TextColumn::make('key')
+				Tables\Columns\TextColumn::make('illnes')
 					->searchable()
-					->label('Matrícula'),
-				Tables\Columns\TextColumn::make('name')
-					->searchable()
-					->label('Nombre'),
+					->limit(15)
+					->tooltip(function (TextColumn $column): ?string {
+						$state = $column->getState();
+
+						if (strlen($state) <= $column->getCharacterLimit()) {
+							return null;
+						}
+
+						// Only render the tooltip if the column content exceeds the length limit.
+						return $state;
+					})
+					->label('Enfermedades'),
 				Tables\Columns\TextColumn::make('evaluation_grade')
 					->label('Calificación')
 					->getStateUsing(function (Model $record) {
@@ -98,17 +187,28 @@ class StudentResource extends Resource
 					}),
 				Tables\Columns\CheckboxColumn::make('validated')
 					->label('Válido')
-					->beforeStateUpdated(function ($record, $state) {
-						$record->update([
-							'validated_by' => Auth::user()->name,
-							'validated_at' => Carbon::now(),
-							'validation_token' => Str::random(32),
-						]);
+					->updateStateUsing(function ($record, $state) {
+						$university_enrollment = $record->setValidated($state);
+						if ($university_enrollment === false || $university_enrollment === null) {
+							Notification::make()
+								->title('Error en la validación')
+								->danger()
+								->body('No se ha podido validar al alumno, verifique que cuenta con un número de matrícula')
+								->send();
+						}
+
+						if ($university_enrollment) {
+							Notification::make()
+								->title('Validación actualizada')
+								->success()
+								->body(($state) ? 'Se ha validado al alumno correctamente' : 'Se ha quitado la validación al alumno correctamente')
+								->send();
+						}
 					}),
-				// Tables\Columns\TextColumn::make('validated_by')
-				// 	->searchable()
-				// 	->label('Validado por')
-				// 	->toggleable(isToggledHiddenByDefault: true),
+				Tables\Columns\TextColumn::make('validated_by')
+					->searchable()
+					->label('Validado por')
+					->toggleable(isToggledHiddenByDefault: true),
 				Tables\Columns\TextColumn::make('validated_at')
 					->dateTime()
 					->sortable()
@@ -229,7 +329,7 @@ class StudentResource extends Resource
 				Tables\Actions\Action::make('printEvaluation')
 					->label('Notas')
 					->url(fn (Student $record): string => route('admin.student_grades', $record)),
-				Tables\Actions\EditAction::make(),
+				// Tables\Actions\EditAction::make(),
 			])
 			->bulkActions([
 				Tables\Actions\BulkActionGroup::make([

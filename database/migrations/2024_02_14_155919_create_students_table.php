@@ -13,8 +13,10 @@ return new class extends Migration
 	{
 		Schema::create('students', function (Blueprint $table) {
 			$table->id();
-			$table->string('key');
+			$table->string('inscription_code');
+			$table->string('university_enrollment')->nullable();
 			$table->string('name');
+			$table->string('gender')->max(1);
 			$table->foreignId('career_id')
 				->constrained('careers')
 				->cascadeOnDelete();
@@ -24,6 +26,7 @@ return new class extends Migration
 			$table->foreignId('period_id')
 				->constrained('periods')
 				->cascadeOnDelete();
+			$table->string('illnes');
 			$table->longText('observations')->nullable();
 			$table->json('grades')->default(
 				json_encode([
@@ -40,6 +43,7 @@ return new class extends Migration
 			$table->string('validated_by')->nullable();
 			$table->timestamp('validated_at')->nullable();
 			$table->string('validation_token', 32)->nullable()->unique();
+			$table->boolean('certificate_downloaded')->default(false);
 			$table->timestamps();
 		});
 	}
