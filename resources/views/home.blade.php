@@ -13,7 +13,7 @@
 			<a wire:navigate rel="stylesheet" href="/students/register"
 				class="rounded-xl border-blue-800 border-2 px-10 py-2 font-medium">Registrarse</a>
 			<a wire:navigate rel="stylesheet" href="/students/certificate"
-				class="rounded-xl bg-blue-400 px-10 py-2 text-neutral-50 font-medium">Constancias</a>
+				class="rounded-xl bg-blue-400 px-10 py-2 text-neutral-50 font-medium">Test</a>
 		</div>
 	</div>
 </div>
