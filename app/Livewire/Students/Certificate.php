@@ -20,6 +20,8 @@ class Certificate extends Component
 
 	public $student_data = null;
 
+	public $modal = false;
+
 	public function searchData()
 	{
 		$this->student_data = null;
@@ -40,11 +42,15 @@ class Certificate extends Component
 			$date = Carbon::createFromDate($student->validated_at);
 			$this->student_data['validated_at'] = $date->isoFormat('D MMMM YYYY');
 		}
+		$this->modal = true;
 	}
 
 	public function downloadPdf()
 	{
 		$student = Student::findOrFail($this->student_data['id']);
+
+		$this->modal = false;
+		
 		if ($student->certificate_downloaded === false) {
 			// dd($this->student_data);
 			view()->share('student', $this->student_data);

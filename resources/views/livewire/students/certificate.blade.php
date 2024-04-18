@@ -18,18 +18,27 @@
 		</form>
 	</div>
 
-	@if ($search !== null && $student_data === null)
-	<h1 wire:transition class="mt-20 rounded-xl border-0 bg-blue-950 text-neutral-50 p-6">
-		No se encontró ninguna coincidencia con <span class="uppercase font-medium">{{ $search }}</span>
-	</h1>
-	@endif
-	@if( $search !== null && $student_data !== null)
-	<button wire:transition wire:click="downloadPdf()" class="mt-20 rounded-xl border-0 bg-blue-950 text-neutral-50 p-6">
+
+
+	<x-modal wire:model="modal" title="Constancias Extraescolares" subtitle="" separator>
+		@if ($search !== null && $student_data === null)
+		<h1 class="text-neutral-950">
+			No se encontró ninguna coincidencia con la matrícula <span class="uppercase font-medium">{{ $search }}</span>
+		</h1>
+		<x-slot:actions>
+			<x-button label="Aceptar" @click="$wire.modal = false" />
+		</x-slot:actions>
+		@endif
+		@if( $search !== null && $student_data !== null)
 		<span>
-			Descargar certificado | {{ $student_data['name'] }} - {{ $student_data['activity']['name'] }} - {{
-			$student_data['validation_token'] }}
+			Nombre: <strong>{{ $student_data['name'] }}</strong><br>
+			Actividad: <strong>{{ $student_data['activity']['name'] }}</strong>
 		</span>
-	</button>
-	@endif
+		<x-slot:actions>
+			<x-button label="Cancelar" @click="$wire.modal = false" />
+			<x-button label="Descargar" class="btn-primary" wire:click="downloadPdf()" />
+		</x-slot:actions>
+		@endif
+	</x-modal>
 
 </div>
