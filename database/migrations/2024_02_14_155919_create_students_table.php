@@ -39,7 +39,8 @@ return new class extends Migration
 					'seventh_criteria' => "0",
 				])
 			);
-			$table->boolean('validated')->default(false);
+			$table->boolean('first_validation')->default(false);
+			$table->boolean('second_validation')->default(false);
 			$table->string('validated_by')->nullable();
 			$table->timestamp('validated_at')->nullable();
 			$table->string('validation_token', 32)->nullable()->unique();

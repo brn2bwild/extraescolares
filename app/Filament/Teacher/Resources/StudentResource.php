@@ -39,7 +39,11 @@ class StudentResource extends Resource
 	{
 		return $form
 			->schema([
-				Forms\Components\Checkbox::make('validated')
+				Forms\Components\Checkbox::make('first_validation')
+					->requiredWith('university_enrollment')
+					->inline()
+					->label('Válido'),
+				Forms\Components\Checkbox::make('second_validation')
 					->requiredWith('university_enrollment')
 					->inline()
 					->label('Válido'),
@@ -185,10 +189,30 @@ class StudentResource extends Resource
 						$data = $record->getEvaluationPoints();
 						return $data;
 					}),
-				Tables\Columns\CheckboxColumn::make('validated')
-					->label('Válido')
+				Tables\Columns\CheckboxColumn::make('first_validation')
+					->label('Primer semestre')
 					->updateStateUsing(function ($record, $state) {
-						$university_enrollment = $record->setValidated($state);
+						$university_enrollment = $record->setFirstValidation($state);
+						if ($university_enrollment === false || $university_enrollment === null) {
+							Notification::make()
+								->title('Error en la validación')
+								->danger()
+								->body('No se ha podido validar al alumno, verifique que cuenta con un número de matrícula')
+								->send();
+						}
+
+						if ($university_enrollment) {
+							Notification::make()
+								->title('Validación actualizada')
+								->success()
+								->body(($state) ? 'Se ha validado al alumno correctamente' : 'Se ha quitado la validación al alumno correctamente')
+								->send();
+						}
+					}),
+				Tables\Columns\CheckboxColumn::make('second_validation')
+					->label('Segundo semestre')
+					->updateStateUsing(function ($record, $state) {
+						$university_enrollment = $record->setSecondValidation($state);
 						if ($university_enrollment === false || $university_enrollment === null) {
 							Notification::make()
 								->title('Error en la validación')

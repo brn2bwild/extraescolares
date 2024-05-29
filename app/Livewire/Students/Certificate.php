@@ -30,7 +30,8 @@ class Certificate extends Component
 			->with('activity.user')
 			->with('career')
 			->with('period')
-			->where('validated', true)
+			->where('first_validation', true)
+			->where('second_validation', true)
 			->Where('university_enrollment', $this->search)
 			->orWhere('validation_token', $this->search)
 			->first();

@@ -26,7 +26,8 @@ class Student extends Model
 		'period_id',
 		'illnes',
 		'grades',
-		'validated',
+		'first_validation',
+		'second_validation',
 		'validated_by',
 		'validated_at',
 		'validation_token',
@@ -35,7 +36,8 @@ class Student extends Model
 
 	protected $casts = [
 		'gender' => Genders::class,
-		'validated' => 'boolean',
+		'first_validation' => 'boolean',
+		'second_validation' => 'boolean',
 		'certificate_downloaded' => 'boolean',
 	];
 
@@ -59,12 +61,24 @@ class Student extends Model
 		return $this->belongsTo(Activity::class);
 	}
 
-	public function setValidated(bool $value): bool | null
+	public function setFirstValidation(bool $value): bool | null
 	{
 		if ($this->university_enrollment === null) return null;
 
 		return $this->update([
-			'validated' => $value,
+			'first_validation' => $value,
+			'validated_by' => ($value) ? Auth::user()->name : null,
+			'validated_at' => ($value) ? Carbon::now() : null,
+			'validation_token' => ($value) ? Str::random(32) : null,
+		]);
+	}
+
+	public function setSecondValidation(bool $value): bool | null
+	{
+		if ($this->university_enrollment === null) return null;
+
+		return $this->update([
+			'second_validation' => $value,
 			'validated_by' => ($value) ? Auth::user()->name : null,
 			'validated_at' => ($value) ? Carbon::now() : null,
 			'validation_token' => ($value) ? Str::random(32) : null,
@@ -73,7 +87,7 @@ class Student extends Model
 
 	public function setCertificateDownloaded(bool  $value): bool | null
 	{
-		if ($this->university_enrollment === null || $this->validated === false) return null;
+		if ($this->university_enrollment === null || $this->first_validation === false && $this->second_validation) return null;
 		
 		return $this->update([
 			'certificate_downloaded' => $value,
