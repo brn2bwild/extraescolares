@@ -1,34 +1,38 @@
-<div class="w-full sm:w-2/3 bg-blue-950 p-10 rounded-xl my-10 sm:mt-24 flex flex-col justify-center items-center">
-	<h2 class="text-neutral-50 text-2xl font-bold uppercase">datos del alumno</h2>
 
-	<!-- Formulario -->
-	<form wire:submit.prevent="saveData" class="mt-4 w-full">
+<x-card title="" subtitle="" class="containerRegister" shadow separator>
+<h2 class="cardtitle">DATOS DEL ALUMNO</h2>
+<form wire:submit.prevent="saveData" class="mt-4 w-full">
 		<div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-8">
 			<div class="col-span-1">
 				<div class="mb-2 w-full">
-					<label for="inscription_code" class="text-neutral-50 block">Número de ficha</label>
-					<input wire:model="inscription_code" type="text" name="inscription_code"
-						class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
-					@error('inscription_code') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+					<label for="inscription_code" class="textLabel">Número de ficha</label>
+					<x-input wire:model="inscription_code" type="text" name="inscription_code"
+						class="" required/>
+						@error('inscription_code') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 				</div>
+				
 				<div class="mb-2 w-full">
-					<label for="name" class="text-neutral-50 block">Nombre</label>
-					<input wire:model="name" type="text" name="name"
-						class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
+					<label for="name" class="textLabel">Nombre</label>
+					<x-input wire:model="name" type="text" name="name" 
+					class="" required/>
 					@error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 				</div>
+
 				<div class="mb-2 w-full">
-					<label for="gender" class="text-neutral-50 block">Género</label>
-					<select wire:model="gender" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
-						<option value="" class="text-neutral-600">Selecciona una opción</option>
+					<label for="gender" class="textLabel">Género</label>
+					<select wire:model="gender" class="select select-primary selects w-full " required>
+						<option value="" class="text-neutral-600 font-sans text-xs">Selecciona una opción</option>
 						@foreach ($genders as $gender)
 						<option value="{{ $gender->value }}">{{ $gender->label() }}</option>
 						@endforeach
 					</select>
 					@error('gender') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+
 				</div>
+
+				
 				<div class="mb-2 w-full">
-					<label for="career" class="text-neutral-50 block">Carrera</label>
+					<label for="career" class="textLabel">Carrera</label>
 					<select wire:model="career" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
 						<option value="" class="text-neutral-600">Selecciona una opción</option>
 						@foreach ($careers as $career)
@@ -40,7 +44,7 @@
 			</div>
 			<div class="col-span-1">
 				<div class="mb-2 w-full">
-					<label for="period" class="text-neutral-50 block">Periodo</label>
+					<label for="period" class="textLabel">Periodo</label>
 					<div class="flex justify-between items-center">
 						<select wire:change="searchPeriod" wire:model="period"
 							class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none" required>
@@ -55,7 +59,7 @@
 					@error('period') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 				</div>
 				<div class="mb-2 w-full">
-					<label for="activity" class="text-neutral-50 block">Extraescolar</label>
+					<label for="activity" class="textLabel">Extraescolar</label>
 					<select wire:model="activity" class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none"
 						required>
 						<option value="" class="text-neutral-600">Selecciona una opción</option>
@@ -66,7 +70,7 @@
 					@error('activity') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 				</div>
 				<div class="mb-2 w-full">
-					<label for="illnes" class="text-neutral-50 block">¿Padeces alguna enfermedad crónica o degenerativa?</label>
+					<label for="illnes" class="textLabel">¿Padeces alguna enfermedad crónica o degenerativa?</label>
 					<textarea wire:model="illnes" type="text" name="illnes"
 						class="block w-full px-4 py-2 rounded-lg ring-0 border-r-0 outline-none resize-none placeholder-neutral-500"
 						placeholder="En caso no padecer alguna enfermedad escribir ninguna" rows="4" cols="50" required></textarea>
@@ -82,4 +86,10 @@
 			</button>
 		</div>
 	</form>
-</div>
+</x-card>
+
+
+
+
+
+
