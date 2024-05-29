@@ -83,7 +83,7 @@
 			}}</strong> y un valor numérico de <strong>{{
 			$student['points'] }}</strong> durante el
 		periodo escolar <strong>{{ $student['period']['lapse'] }}</strong>
-		con un valor curricular de 2 créditos.<br><br>
+		con un valor curricular de <strong>2</strong> créditos.<br><br>
 		Se extiende la presente en la ciudad de Teapa Tabasco; con fecha de <strong>{{ $student['validated_at'] }}</strong>.
 	</p>
 	<span class="user">{{ $student['activity']['user'][0]['name'] }}</span>

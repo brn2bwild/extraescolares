@@ -11,21 +11,23 @@
 
 <body class="antialiased bg-neutral-50 min-h-screen flex flex-col items-center">
 	<x-toast />
-	<nav class="w-full flex justify-between bg-blue-950 p-4 items-center">
-		<div>
+
+	<div class="navbar nav">
+		<div class="flex-1">
 			<img src="/storage/images/logo_tecnm_blanco.png" class=" h-16" alt="logo_tecnm">
 		</div>
-		<div class="flex gap-8">
-			<a href="{{ route('home') }}" wire:navigate
-				class="rounded-xl border-2 border-neutral-50 px-4 py-2 font-medium text-neutral-50">Inicio</a>
-			<a href="{{ route('students.register') }}" wire:navigate
-				class="rounded-xl bg-neutral-50 text-blue-950 px-4 py-2 font-medium">Registro</a>
-			<a href="{{ route('students.certificate') }}" wire:navigate
-				class="rounded-xl bg-neutral-50 text-blue-950 px-4 py-2 font-medium">Constancias</a>
+		<div class="flex-none">
+			<ul class="menu menu-horizontal">
+				<li><a href="{{ route('home') }}" class="navlink" wire:navigate>Inicio</a></li>
+				<li><a href="{{ route('students.register') }}" class="navlink" wire:navigate>Registro</a></li>
+				<li><a href="{{ route('students.certificate') }}" class="navlink" wire:navigate>Constancias</a></li>
+			</ul>
 		</div>
-	</nav>
+	</div>
 	@yield('content')
 	@livewireScripts
+
+
 </body>
 
 </html>
