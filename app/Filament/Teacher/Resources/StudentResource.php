@@ -35,6 +35,11 @@ class StudentResource extends Resource
 
 	protected static ?string $pluralModelLabel = 'Estudiantes';
 
+	public static function canCreate(): bool
+	{
+		return false;
+	}
+
 	public static function form(Form $form): Form
 	{
 		return $form
@@ -249,7 +254,12 @@ class StudentResource extends Resource
 					->toggleable(isToggledHiddenByDefault: true)
 					->label('Fecha de modificación'),
 			])
-			->modifyQueryUsing(fn (Builder $query) => $query->where('activity_id', Activity::where('user_id', Auth::user()->id)->first()->id))
+			->modifyQueryUsing(
+				fn (Builder $query) => $query->where(
+					'activity_id',
+					Activity::where('user_id', Auth::user()->id)->first()->id
+				)
+			)
 			->filters([
 				//
 			])
@@ -373,7 +383,7 @@ class StudentResource extends Resource
 	{
 		return [
 			'index' => Pages\ListStudents::route('/'),
-			'create' => Pages\CreateStudent::route('/create'),
+			// 'create' => Pages\CreateStudent::route('/create'),
 			'edit' => Pages\EditStudent::route('/{record}/edit'),
 		];
 	}
