@@ -19,7 +19,10 @@ class EditStudent extends EditRecord
 
 	protected function handleRecordUpdate(Model $record, array $data): Model
 	{
-		if ($data['university_enrollment'] === null) $data['validated'] = false;
+		if ($data['university_enrollment'] === null) {
+			$data['first_validation'] = false;
+			$data['second_validation'] = false;
+		}
 
 		$record->update($data);
 
