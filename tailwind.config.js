@@ -40,14 +40,7 @@ export default {
               "border-radius": "0.75rem",
               
             },
-            ". selects":{
-              "padding-left": "1rem",
-              "padding-right": "1rem",
-              "padding-top": "0.5rem",
-              "padding-bottom": "0.5rem",
-              "background-color":"#ffffff",
-
-            },
+           
             ".nav":{
               "background-color": "#1b396a",
               "justify-content": "space-between",
@@ -66,6 +59,7 @@ export default {
              ".containerRegister":{
               "background-color": "#1b396a",
               "margin-top": "2.5rem",
+              "border-radius": "0.75rem",
               
             },
             ".containerCertificate":{
@@ -83,12 +77,27 @@ export default {
               "line-height": "1",
               "text-align": "center",
             }, 
-            ".homelinks":{
+            ".homelinks1":{
               "background-color": "#fafafa",
               "border-width": "2px",
               "border-color": "#1b396a",
               "border-radius": "0.75rem",
               "color": "#1b396a",
+              "font-weight": "500",
+              "padding-left": "2.5rem",
+              "padding-right": "2.5rem",
+              "padding-top": "0.5rem",
+              "padding-bottom": "0.5rem",
+              "font-weight": "500",
+
+            },
+
+            ".homelinks2":{
+              "background-color": "#1b396a",
+              "border-width": "2px",
+              "border-color": "#1b396a",
+              "border-radius": "0.75rem",
+              "color": "#fafafa",
               "font-weight": "500",
               "padding-left": "2.5rem",
               "padding-right": "2.5rem",
@@ -109,8 +118,37 @@ export default {
             ".textLabel":{
               "color": "#fafafa",
               "display": "block"
-              
+            },
+
+            ".label":{
+              "display": "block",
+              "width": "100%",
+              "padding-left": "1rem",
+              "padding-right": "1rem",
+              "padding-top": "0.5rem",
+              "padding-bottom": "0.5rem",
+              "border-radius": "0.5rem",
+              "box-shadow": "var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color)",
+              "border-width": "0px",
+              "outline": "2px solid transparent",
+              "outline-offset": "2px",
             }, 
+
+            ".selects": {
+              "display": "block",
+              "width": "100%",
+              "padding-left": "1rem",
+              "padding-right": "1rem",
+              "padding-top": "0.5rem",
+              "padding-bottom": "0.5rem",
+              "border-radius": "0.5rem",
+              "box-shadow": "var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color)",
+              "border-width": "0px",
+              "outline": "2px solid transparent",
+              "outline-offset": "2px",
+            },
+            
+
 
 
 

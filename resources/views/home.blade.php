@@ -11,9 +11,9 @@
 		<h1 class="text">Departamento de difusión y concertación</h1>
 		<div class="flex justify-evenly w-2/3 mt-12">
 			<a wire:navigate rel="stylesheet" href="/students/register"
-				class="homelinks">Registrarse</a>
+				class="homelinks2">Registrarse</a>
 			<a wire:navigate rel="stylesheet" href="/students/certificate"
-				class="homelinks">Constancias</a>
+				class="homelinks1">Constancias</a>
 		</div>
 	</div>
 </div>
