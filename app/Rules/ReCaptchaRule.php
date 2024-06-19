@@ -10,15 +10,19 @@ class ReCaptchaRule implements ValidationRule
 {
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $query = http_build_query([
+        // $query = http_build_query([
+        //     'secret' => config('services.recaptcha.secret'),
+        //     'response' => $value,
+        // ]);
+
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
             'secret' => config('services.recaptcha.secret'),
             'response' => $value,
-        ]);
+        ])->json();
 
-        $response = Http::post('https://www.google.com/recaptcha/api/siteverify?' . $query);
-        $captchaLevel = $response->json('success');
+        // $captchaLevel = $response->json('success');
 
-        if ($captchaLevel !== true) {
+        if ($response['success'] !== true) {
             $fail('Debes completar el reCaptcha para continuar');
         }
     }

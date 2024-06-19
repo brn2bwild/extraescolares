@@ -156,7 +156,7 @@ class StudentResource extends Resource
 					})
 					->toggleable(isToggledHiddenByDefault: true),
 				Tables\Columns\CheckboxColumn::make('first_validation')
-					->label('Válido')
+					->label('1er. sem.')
 					->updateStateUsing(function ($record, $state) {
 						$university_enrollment = $record->setFirstValidation($state);
 						if ($university_enrollment === false || $university_enrollment === null) {
@@ -176,7 +176,7 @@ class StudentResource extends Resource
 						}
 					}),
 				Tables\Columns\CheckboxColumn::make('second_validation')
-					->label('Válido')
+					->label('2do. sem.')
 					->updateStateUsing(function ($record, $state) {
 						$university_enrollment = $record->setSecondValidation($state);
 						if ($university_enrollment === false || $university_enrollment === null) {

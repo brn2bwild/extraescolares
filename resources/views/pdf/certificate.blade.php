@@ -44,9 +44,19 @@
 
 		.user {
 			position: absolute;
-			font-size: 0.8rem;
-			width: 210px;
+			font-size: 0.75rem;
+			width: 230px;
 			top: 73%;
+			left: 29%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+		}
+
+		.user-activity {
+			position: absolute;
+			font-size: 0.75rem;
+			width: 230px;
+			top: 74.5%;
 			left: 29%;
 			transform: translate(-50%, -50%);
 			text-align: center;
@@ -87,6 +97,7 @@
 		Se extiende la presente en la ciudad de Teapa Tabasco; con fecha de <strong>{{ $student['validated_at'] }}</strong>.
 	</p>
 	<span class="user">{{ $student['activity']['user'][0]['name'] }}</span>
+	<span class="user-activity">Responsable {{$student['activity']['name']}}</span>
 	<p class="token">{{ $student['validation_token'] }}</p>
 </body>
 
