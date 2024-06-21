@@ -9,8 +9,6 @@ use Livewire\Component;
 use Mary\Traits\Toast;
 use PDF;
 
-use function Termwind\render;
-
 class Certificate extends Component
 {
 	use Toast;
@@ -51,7 +49,7 @@ class Certificate extends Component
 		$student = Student::findOrFail($this->student_data['id']);
 
 		$this->modal = false;
-		
+
 		if ($student->certificate_downloaded === false) {
 			// dd($this->student_data);
 			view()->share('student', $this->student_data);
