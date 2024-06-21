@@ -20,7 +20,7 @@ class Register extends Component
 	use Toast;
 
 	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
-	#[Validate(['regex:/^\d{5,10}$/'], message: ['regex' => 'Debes introducir un número de ficha válido'])]
+	#[Validate(['regex:/^\d{6}$/'], message: ['regex' => 'Debes introducir un número de ficha válido'])]
 	#[Validate(['unique:students,inscription_code'], message: ['unique' => 'El número de ficha ya ha sido registrado'])]
 	public $inscription_code;
 
