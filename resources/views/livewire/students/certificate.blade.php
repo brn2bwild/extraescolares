@@ -12,14 +12,13 @@
                     </div>
                     <div class="w-full flex justify-between items-center">
                         <button type="button" id="btn-scan-qr" class="btn-primary flex justify-between gap-2">
-                            <span>
-                                Leer código QR
-                            </span>
+                            <span>Verificar código QR</span>
                             <x-icon name="o-qr-code" class="h-6 w-6" />
                         </button>
-                        <button type="submit" class="btn-primary flex">
+                        <button type="submit" class="btn-primary flex justify-between gap-2">
                             <img wire:loading wire:target="searchData" src="/storage/images/spinner.svg" alt="spinner" class="h-6 mr-2">
-                            Consultar
+                            <span>Buscar</span>
+                            <x-icon name="o-magnifying-glass" class="h-6 w-6" />+
                         </button>
                     </div>
                 </form>

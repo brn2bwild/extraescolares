@@ -71,8 +71,16 @@
 			position: absolute;
 			z-index: 1;
 			font-size: 0.8rem;
-			bottom: 125px;
-			right: 80px;
+			bottom: 95px;
+			right: 300px;
+			transform: translate(0%, -50%);
+		}
+
+		.token-qr {
+			position: absolute;
+			z-index: 1;
+			bottom: 50px;
+			right: 160px;
 			transform: translate(0%, -50%);
 		}
 	</style>
@@ -99,6 +107,9 @@
 	<span class="user">{{ $student['activity']['user'][0]['name'] }}</span>
 	<span class="user-activity">Responsable {{$student['activity']['name']}}</span>
 	<p class="token">{{ $student['validation_token'] }}</p>
+	<div class="token-qr">
+		<img src="data:image/png;base64,{{  $qrcode  }}" alt="qr-code">
+	</div>
 </body>
 
 </html>

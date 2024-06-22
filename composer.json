@@ -18,6 +18,7 @@
         "livewire/livewire": "^3.4",
         "robsontenorio/mary": "^1.21",
         "shanerbaner82/panel-roles": "^0.0.3",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^6.4"
     },
     "require-dev": {

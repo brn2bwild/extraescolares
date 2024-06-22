@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use SebastianBergmann\Type\NullType;
 
 class Student extends Model
 {
@@ -88,7 +87,7 @@ class Student extends Model
 	public function setCertificateDownloaded(bool  $value): bool | null
 	{
 		if ($this->university_enrollment === null || $this->first_validation === false && $this->second_validation) return null;
-		
+
 		return $this->update([
 			'certificate_downloaded' => $value,
 		]);
