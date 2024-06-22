@@ -18,7 +18,7 @@
                         <button type="submit" class="btn-primary flex justify-between gap-2">
                             <img wire:loading wire:target="searchData" src="/storage/images/spinner.svg" alt="spinner" class="h-6 mr-2">
                             <span>Buscar</span>
-                            <x-icon name="o-magnifying-glass" class="h-6 w-6" />+
+                            <x-icon name="o-magnifying-glass" class="h-6 w-6" />
                         </button>
                     </div>
                 </form>
