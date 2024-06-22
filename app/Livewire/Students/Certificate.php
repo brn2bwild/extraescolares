@@ -70,18 +70,7 @@ class Certificate extends Component
 			);
 		}
 
-		// if ($student->certificate_downloaded === false) {
-		// view()->share('student', $this->student_data);
-		// 	$pdf = PDF::loadView('pdf.certificate', $this->student_data)
-		// 		->setPaper('letter', 'portrait')
-		// 		->output();
-		// 	return response()->streamDownload(
-		// 		fn () => print($pdf),
-		// 		strtolower(str_replace(" ", "_", $this->student_data['name'])) . "_certificate.pdf"
-		// 	);
-		// }
-
-		$this->toast(
+		return $this->toast(
 			type: 'warning',
 			title: 'Descarga de constancia',
 			description: 'La constancia ya ha sido descargada, para descargar una nueva solicitar en el área correspondiente',                  			// optional (text)
