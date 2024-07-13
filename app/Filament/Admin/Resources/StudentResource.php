@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class StudentResource extends Resource
 {
@@ -329,6 +331,12 @@ class StudentResource extends Resource
 				Tables\Actions\BulkActionGroup::make([
 					Tables\Actions\DeleteBulkAction::make(),
 				]),
+				ExportBulkAction::make()
+					->exports([
+						ExcelExport::make()->withFilename(date('Y-m-d') . '-extraescolares')
+							->withColumns()
+							->fromTable(),
+					]),
 			]);
 	}
 
