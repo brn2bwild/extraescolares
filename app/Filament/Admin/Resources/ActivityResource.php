@@ -19,7 +19,7 @@ class ActivityResource extends Resource
 {
 	protected static ?string $model = Activity::class;
 
-	protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+	protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
 	protected static ?string $modelLabel = 'Actividad';
 
