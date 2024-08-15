@@ -52,7 +52,7 @@ class StudentResource extends Resource
 					->label('Nombre'),
 				Forms\Components\Select::make('gender')
 					->required()
-					->options(fn (): array => Genders::forSelect())
+					->options(fn(): array => Genders::forSelect())
 					// ->formatStateUsing(fn (string|null $state): string => Genders::getLabel($state))
 					->label('Género'),
 				Forms\Components\Select::make('career_id')
@@ -324,7 +324,7 @@ class StudentResource extends Resource
 					}),
 				Tables\Actions\Action::make('printEvaluation')
 					->label('Notas')
-					->url(fn (Student $record): string => route('admin.student_grades', $record)),
+					->url(fn(Student $record): string => route('admin.student_grades', $record)),
 				// Tables\Actions\EditAction::make(),
 			])
 			->bulkActions([
@@ -337,7 +337,8 @@ class StudentResource extends Resource
 							->withColumns()
 							->fromTable(),
 					]),
-			]);
+			])
+			->defaultSort('created_at', 'desc');
 	}
 
 	public static function getRelations(): array
