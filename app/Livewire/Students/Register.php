@@ -7,6 +7,10 @@ use App\Models\Activity;
 use App\Models\Career;
 use App\Models\Period;
 use App\Models\Student;
+use App\Rules\ReCaptchaRule;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Mary\Traits\Toast;
@@ -16,7 +20,7 @@ class Register extends Component
 	use Toast;
 
 	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
-	#[Validate(['regex:/^\d{5,10}$/'], message: ['regex' => 'Debes introducir un número de ficha válido'])]
+	#[Validate(['regex:/^\d{8}$/'], message: ['regex' => 'Debes introducir un número de ficha válido'])]
 	#[Validate(['unique:students,inscription_code'], message: ['unique' => 'El número de ficha ya ha sido registrado'])]
 	public $inscription_code;
 
@@ -43,6 +47,8 @@ class Register extends Component
 	public $periods;
 	public $genders;
 
+	public $recaptcha;
+
 	public function mount()
 	{
 		$this->activities = [];
@@ -53,6 +59,22 @@ class Register extends Component
 
 	public function saveData()
 	{
+		$validator = Validator::make(
+			[
+				'recaptcha' => $this->recaptcha,
+			],
+			[
+				'recaptcha' => ['required', new ReCaptchaRule],
+			]
+		);
+
+		if ($validator->fails()) {
+			$this->setErrorBag($validator->errors());
+			$this->dispatch('resetReCaptcha');
+
+			return null;
+		}
+
 		$this->validate();
 
 		if (Student::where('activity_id', $this->activity)->count() < Activity::where('id', $this->activity)->first()->capacity) {
@@ -116,6 +138,7 @@ class Register extends Component
 			->toArray();
 	}
 
+	
 	public function render()
 	{
 		return view('livewire.students.register')

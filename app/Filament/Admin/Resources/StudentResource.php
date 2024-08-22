@@ -19,12 +19,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class StudentResource extends Resource
 {
 	protected static ?string $model = Student::class;
 
-	protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+	protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
 	protected static ?string $modelLabel = 'Estudiante';
 
@@ -50,7 +52,7 @@ class StudentResource extends Resource
 					->label('Nombre'),
 				Forms\Components\Select::make('gender')
 					->required()
-					->options(fn (): array => Genders::forSelect())
+					->options(fn(): array => Genders::forSelect())
 					// ->formatStateUsing(fn (string|null $state): string => Genders::getLabel($state))
 					->label('Género'),
 				Forms\Components\Select::make('career_id')
@@ -156,7 +158,7 @@ class StudentResource extends Resource
 					})
 					->toggleable(isToggledHiddenByDefault: true),
 				Tables\Columns\CheckboxColumn::make('first_validation')
-					->label('Válido')
+					->label('1er. sem.')
 					->updateStateUsing(function ($record, $state) {
 						$university_enrollment = $record->setFirstValidation($state);
 						if ($university_enrollment === false || $university_enrollment === null) {
@@ -176,7 +178,7 @@ class StudentResource extends Resource
 						}
 					}),
 				Tables\Columns\CheckboxColumn::make('second_validation')
-					->label('Válido')
+					->label('2do. sem.')
 					->updateStateUsing(function ($record, $state) {
 						$university_enrollment = $record->setSecondValidation($state);
 						if ($university_enrollment === false || $university_enrollment === null) {
@@ -322,14 +324,21 @@ class StudentResource extends Resource
 					}),
 				Tables\Actions\Action::make('printEvaluation')
 					->label('Notas')
-					->url(fn (Student $record): string => route('admin.student_grades', $record)),
+					->url(fn(Student $record): string => route('admin.student_grades', $record)),
 				// Tables\Actions\EditAction::make(),
 			])
 			->bulkActions([
 				Tables\Actions\BulkActionGroup::make([
 					Tables\Actions\DeleteBulkAction::make(),
 				]),
-			]);
+				ExportBulkAction::make()
+					->exports([
+						ExcelExport::make()->withFilename(date('Y-m-d') . '-extraescolares')
+							->withColumns()
+							->fromTable(),
+					]),
+			])
+			->defaultSort('created_at', 'desc');
 	}
 
 	public static function getRelations(): array

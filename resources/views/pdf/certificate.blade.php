@@ -44,9 +44,19 @@
 
 		.user {
 			position: absolute;
-			font-size: 0.8rem;
-			width: 210px;
+			font-size: 0.75rem;
+			width: 230px;
 			top: 73%;
+			left: 29%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+		}
+
+		.user-activity {
+			position: absolute;
+			font-size: 0.75rem;
+			width: 230px;
+			top: 74.5%;
 			left: 29%;
 			transform: translate(-50%, -50%);
 			text-align: center;
@@ -61,8 +71,16 @@
 			position: absolute;
 			z-index: 1;
 			font-size: 0.8rem;
-			bottom: 125px;
-			right: 80px;
+			bottom: 95px;
+			right: 300px;
+			transform: translate(0%, -50%);
+		}
+
+		.token-qr {
+			position: absolute;
+			z-index: 1;
+			bottom: 50px;
+			right: 160px;
 			transform: translate(0%, -50%);
 		}
 	</style>
@@ -87,7 +105,11 @@
 		Se extiende la presente en la ciudad de Teapa Tabasco; con fecha de <strong>{{ $student['validated_at'] }}</strong>.
 	</p>
 	<span class="user">{{ $student['activity']['user'][0]['name'] }}</span>
+	<span class="user-activity">Responsable {{$student['activity']['name']}}</span>
 	<p class="token">{{ $student['validation_token'] }}</p>
+	<div class="token-qr">
+		<img src="data:image/png;base64,{{  $qrcode  }}" alt="qr-code">
+	</div>
 </body>
 
 </html>
