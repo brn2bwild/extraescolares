@@ -26,7 +26,14 @@
         </div>
     </div>
 
-    <x-modal wire:model="modal" title="Constancias Extraescolares" subtitle="" separator>
+    <x-modal wire:model="modalAlert" title="Hubo un problema" class="backdrop-blur">
+        <div class="mb-5">{{ $alertModalText}}</div>
+        <x-slot:actions>
+            <x-button label="Aceptar" @click="$wire.modalAlert = false" class="btn-secondary"/>
+        </x-slot:actions>
+    </x-modal>
+
+    <x-modal wire:model="downloadCertificateModal" title="Constancias Extraescolares" subtitle="" separator>
         @if ($search !== null && $student_data === null)
         <h1 class="text-neutral-950">
             No se encontró ninguna coincidencia con la matrícula <span class="uppercase font-medium">{{ $search }}</span>

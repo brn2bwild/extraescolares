@@ -104,6 +104,7 @@ class StudentResource extends Resource
 					})
 					->toggleable(isToggledHiddenByDefault: true),
 				Tables\Columns\TextColumn::make('activity.name')
+					->searchable()
 					->numeric()
 					->sortable()
 					->label('Actividad'),
