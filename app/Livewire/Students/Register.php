@@ -22,25 +22,25 @@ class Register extends Component
 	#[Validate(['required'], message: ['required' => 'Este campo es requerido'])]
 	#[Validate(['regex:/^\d{8}$/'], message: ['regex' => 'Debes introducir un número de ficha válido'])]
 	#[Validate(['unique:students,inscription_code'], message: ['unique' => 'El número de ficha ya ha sido registrado'])]
-	public $inscription_code;
+	public string $inscription_code;
 
 	#[Validate(['required'], message: ['required' => 'Debes proporcionar tu nombre'])]
-	public $name;
+	public string $name;
 
 	#[Validate(['required'], message: ['required' => 'Debes seleccionar una carrera'])]
-	public $career;
+	public string $career;
 
 	#[Validate(['required'], message: ['required' => 'Debes seleccionar una actividad'])]
-	public $activity;
+	public string $activity;
 
 	#[Validate(['required'], message: ['required' => 'Debes seleccionar un periodo'])]
-	public $period;
+	public string $period;
 
 	#[Validate(['required'], message: ['required' => 'Debes especificar tu estado de salud'])]
-	public $illnes;
+	public string $illnes;
 
 	#[Validate(['required'], message: ['required' => 'Debes seleccionar un género'])]
-	public $gender;
+	public string $gender;
 
 	public $careers;
 	public $activities;
@@ -48,6 +48,10 @@ class Register extends Component
 	public $genders;
 
 	public $recaptcha;
+
+	public bool $showAlertModal = false;
+
+	public string $alertModalText = '';
 
 	public function mount()
 	{
@@ -88,41 +92,27 @@ class Register extends Component
 				'illnes' => $this->illnes,
 			]);
 
-			$this->toast(
-				type: 'success',
-				title: 'Registro guardado',
-				description: null,                  // optional (text)
-				position: 'toast-bottom toast-end',    // optional (daisyUI classes)
-				icon: 'o-check-circle',       // Optional (any icon)
-				css: 'alert-success',                  // Optional (daisyUI classes)
-				timeout: 3000,                      // optional (ms)
-				redirectTo: null                    // optional (uri)
-			);
+			$this->alertModalText = "Tu registro se ha completado con éxito";
 
 			$this->clearData();
 		} else {
-			$this->toast(
-				type: 'warning',
-				title: 'Error al registrarte',
-				description: 'Al parecer no hay espacios disponibles para la actividad a la que te deseas inscribir',                  // optional (text)
-				position: 'toast-bottom toast-end',    // optional (daisyUI classes)
-				icon: 'c-exclamation-circle',       // Optional (any icon)
-				css: 'alert-success',                  // Optional (daisyUI classes)
-				timeout: 4000,                      // optional (ms)
-				redirectTo: null                    // optional (uri)
-			);
+			$this->alertModalText = "Al parecer no hay espacios disponibles para la actividad a la que te deseas inscribir";
 		}
+
+		$this->showAlertModal = true;
 	}
 
 	public function clearData()
 	{
-		$this->inscription_code = null;
-		$this->name = null;
-		$this->career = null;
-		$this->activity = null;
-		$this->period = null;
-		$this->gender = null;
-		$this->illnes = null;
+		$this->inscription_code = '';
+		$this->name = '';
+		$this->career = '';
+		$this->activity = '';
+		$this->period = '';
+		$this->gender = '';
+		$this->illnes = '';
+
+		$this->dispatch('reload-recaptcha');
 	}
 
 	public function searchPeriod()
@@ -138,7 +128,6 @@ class Register extends Component
 			->toArray();
 	}
 
-	
 	public function render()
 	{
 		return view('livewire.students.register')

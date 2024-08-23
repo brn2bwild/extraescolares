@@ -26,10 +26,10 @@
         </div>
     </div>
 
-    <x-modal wire:model="modalAlert" title="Hubo un problema" class="backdrop-blur">
+    <x-modal wire:model="modalAlert" title="Constancias extraescolares" class="backdrop-blur">
         <div class="mb-5">{{ $alertModalText}}</div>
         <x-slot:actions>
-            <x-button label="Aceptar" @click="$wire.modalAlert = false" class="btn-secondary"/>
+            <x-button label="Aceptar" @click="$wire.modalAlert = false" class="btn-secondary" />
         </x-slot:actions>
     </x-modal>
 
@@ -48,7 +48,7 @@
             Actividad: <strong>{{ $student_data['activity']['name'] }}</strong>
         </span>
         <x-slot:actions>
-            <x-button label="Cancelar" @click="$wire.modal = false" />
+            <x-button label="Cancelar" @click="$wire.downloadCertificateModal = false" />
             <x-button label="Descargar" class="btn-secondary" wire:click="downloadPdf()" />
         </x-slot:actions>
         @endif
