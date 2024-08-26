@@ -20,7 +20,7 @@
 				<div class="mb-2 w-full">
 					<label for="gender" class="textLabel">Género</label>
 					<select wire:model="gender" class="selects" required>
-						<option value="" class="text-neutral-600 font-sans text-xs">Selecciona una opción</option>
+						<option value="" class="text-neutral-600 font-sans">Selecciona una opción</option>
 						@foreach ($genders as $gender)
 						<option value="{{ $gender->value }}">{{ $gender->label() }}</option>
 						@endforeach
