@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources;
 use App\Enums\Genders;
 use App\Filament\Admin\Resources\StudentResource\Pages;
 use App\Filament\Admin\Resources\StudentResource\RelationManagers;
+use App\Models\Career;
 use App\Models\Student;
 use Carbon\Carbon;
 use Filament\Forms;
@@ -13,6 +14,9 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint\Operators\IsRelatedToOperator;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -94,6 +98,7 @@ class StudentResource extends Resource
 		return $table
 			->columns([
 				Tables\Columns\TextColumn::make('name')
+					->sortable()
 					->searchable()
 					->label('Nombre'),
 				Tables\Columns\TextColumn::make('gender')
@@ -104,13 +109,14 @@ class StudentResource extends Resource
 					})
 					->toggleable(isToggledHiddenByDefault: true),
 				Tables\Columns\TextColumn::make('activity.name')
-					->searchable()
 					->numeric()
 					->sortable()
+					->searchable()
 					->label('Actividad'),
 				Tables\Columns\TextColumn::make('period.lapse')
 					->numeric()
 					->sortable()
+					->searchable()
 					->label('Periodo'),
 				Tables\Columns\TextColumn::make('inscription_code')
 					->searchable()
@@ -210,6 +216,7 @@ class StudentResource extends Resource
 				Tables\Columns\TextColumn::make('career.name')
 					->numeric()
 					->sortable()
+					->searchable()
 					->toggleable(isToggledHiddenByDefault: true)
 					->label('Carrera'),
 				Tables\Columns\TextColumn::make('created_at')
@@ -224,7 +231,26 @@ class StudentResource extends Resource
 					->label('Fecha de modificación'),
 			])
 			->filters([
-				//
+				SelectFilter::make('career')
+					->relationship('career', 'name')
+					->multiple()
+					->preload()
+					// ->options(fn() => Career::all()->pluck('name', 'id'))
+					// ->attribute('career_id')
+					// ->query(function (Builder $query, array $data) {
+					// 	if (!empty($data['values'])) {
+					// 		// if we have a value (the aircraft ID from our options() query), just query a nested
+					// 		// set of whereHas() clauses to reach our target, in this case two deep
+					// 		$query->whereHas(
+					// 			'career',
+					// 			fn(Builder $query) => $query->whereHas(
+					// 				'students',
+					// 				fn(Builder $query) => $query->whereIn('career_id', $data['values'])
+					// 			)
+					// 		);
+					// 	}
+					// })
+					->label('Carrera'),
 			])
 			->actions([
 				Tables\Actions\Action::make('evaluateStudent')

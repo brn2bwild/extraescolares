@@ -58,7 +58,7 @@ class Certificate extends Component
 		$this->downloadCertificateModal = false;
 
 		if ($student->validation_token === null) {
-			$this->alertModalText = "Encontramos un problema con la validez de tu constancia, consulta con tu maestro de extraescolar";
+			$this->alertModalText = "Reportate con tu maestro para verificar tú situación académica";
 			$this->modalAlert = true;
 			return false;
 		}
