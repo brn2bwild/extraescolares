@@ -15,6 +15,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -58,7 +59,7 @@ class StudentResource extends Resource
 					->label('Nombre'),
 				Forms\Components\Select::make('gender')
 					->required()
-					->options(fn (): array => Genders::forSelect())
+					->options(fn(): array => Genders::forSelect())
 					// ->formatStateUsing(fn (string $state): string => Genders::getDescription($state))
 					->label('Género'),
 				Forms\Components\Select::make('career_id')
@@ -140,6 +141,7 @@ class StudentResource extends Resource
 				Tables\Columns\TextColumn::make('career.name')
 					->numeric()
 					->sortable()
+					->searchable()
 					->limit(10)
 					->tooltip(function (TextColumn $column): ?string {
 						$state = $column->getState();
@@ -171,6 +173,7 @@ class StudentResource extends Resource
 					->label('Matrícula'),
 				Tables\Columns\TextColumn::make('period.lapse')
 					->numeric()
+					->searchable()
 					->sortable()
 					->toggleable(isToggledHiddenByDefault: true)
 					->label('Periodo'),
@@ -255,13 +258,21 @@ class StudentResource extends Resource
 					->label('Fecha de modificación'),
 			])
 			->modifyQueryUsing(
-				fn (Builder $query) => $query->where(
+				fn(Builder $query) => $query->where(
 					'activity_id',
 					Activity::where('user_id', Auth::user()->id)->first()->id
 				)
 			)
 			->filters([
-				//
+				SelectFilter::make('career')
+					->relationship('career', 'name')
+					->multiple()
+					->preload()
+					->label('Carrera'),
+				SelectFilter::make('period')
+					->relationship('period', 'lapse')
+					->preload()
+					->label('Periodo'),
 			])
 			->actions([
 				Tables\Actions\Action::make('evaluateStudent')
@@ -362,7 +373,7 @@ class StudentResource extends Resource
 					}),
 				Tables\Actions\Action::make('printEvaluation')
 					->label('Notas')
-					->url(fn (Student $record): string => route('admin.student_grades', $record)),
+					->url(fn(Student $record): string => route('admin.student_grades', $record)),
 				// Tables\Actions\EditAction::make(),
 			])
 			->bulkActions([

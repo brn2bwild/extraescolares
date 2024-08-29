@@ -235,25 +235,11 @@ class StudentResource extends Resource
 					->relationship('career', 'name')
 					->multiple()
 					->preload()
-					// ->options(fn() => Career::all()->pluck('name', 'id'))
-					// ->attribute('career_id')
-					// ->query(function (Builder $query, array $data) {
-					// 	if (!empty($data['values'])) {
-					// 		// if we have a value (the aircraft ID from our options() query), just query a nested
-					// 		// set of whereHas() clauses to reach our target, in this case two deep
-					// 		$query->whereHas(
-					// 			'career',
-					// 			fn(Builder $query) => $query->whereHas(
-					// 				'students',
-					// 				fn(Builder $query) => $query->whereIn('career_id', $data['values'])
-					// 			)
-					// 		);
-					// 	}
-					// })
 					->label('Carrera'),
 				SelectFilter::make('period')
 					->relationship('period', 'lapse')
 					->preload()
+					->label('Periodo'),
 			])
 			->actions([
 				Tables\Actions\Action::make('evaluateStudent')
