@@ -22,6 +22,8 @@ class Certificate extends Component
 
 	public string $alertModalText = '';
 
+	public string $downloadModalText = '';
+
 	public bool $downloadCertificateModal = false;
 
 	public bool $modalAlert = false;
@@ -39,6 +41,12 @@ class Certificate extends Component
 			->Where('university_enrollment', $this->search)
 			->orWhere('validation_token', $this->search)
 			->first();
+
+		if (!$student) {
+			$this->downloadModalText = 'Aún no se ha validado tu participación en el extraescolar, acércate con tu profesor para verificar tu situación académica';
+			$this->downloadCertificateModal = true;
+			return false;
+		}
 
 		if (isset($student)) {
 			$this->student_data = $student->toArray();
