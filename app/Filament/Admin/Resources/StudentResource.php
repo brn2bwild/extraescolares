@@ -251,6 +251,9 @@ class StudentResource extends Resource
 					// 	}
 					// })
 					->label('Carrera'),
+				SelectFilter::make('period')
+					->relationship('period', 'lapse')
+					->preload()
 			])
 			->actions([
 				Tables\Actions\Action::make('evaluateStudent')
