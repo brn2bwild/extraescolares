@@ -123,7 +123,7 @@ class Register extends Component
 			})
 			->get()
 			->filter(function ($activity) {
-				if ((Student::where('activity_id', $activity->id)->count() < $activity->capacity)) return $activity;
+				if ((Student::where('activity_id', $activity->id)->where('period_id', $this->period)->count() < $activity->capacity)) return $activity;
 			})
 			->toArray();
 	}
