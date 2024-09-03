@@ -81,7 +81,7 @@ class Register extends Component
 
 		$this->validate();
 
-		if (Student::where('activity_id', $this->activity)->count() < Activity::where('id', $this->activity)->first()->capacity) {
+		if (Student::where('activity_id', $this->activity)->where('period_id', $this->period)->count() < Activity::where('id', $this->activity)->first()->capacity) {
 			Student::create([
 				'inscription_code' => $this->inscription_code,
 				'name'  => $this->name,
