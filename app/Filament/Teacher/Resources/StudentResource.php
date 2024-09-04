@@ -24,7 +24,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Exists;
-
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class StudentResource extends Resource
 {
@@ -114,6 +115,7 @@ class StudentResource extends Resource
 						// Only render the tooltip if the column content exceeds the length limit.
 						return $state;
 					})
+					->searchable()
 					->label('Nombre'),
 				Tables\Columns\TextColumn::make('gender')
 					->sortable()
@@ -136,6 +138,7 @@ class StudentResource extends Resource
 				Tables\Columns\TextColumn::make('activity.name')
 					->numeric()
 					->sortable()
+					->searchable()
 					->toggleable(isToggledHiddenByDefault: true)
 					->label('Actividad'),
 				Tables\Columns\TextColumn::make('career.name')
@@ -258,10 +261,11 @@ class StudentResource extends Resource
 					->label('Fecha de modificación'),
 			])
 			->modifyQueryUsing(
-				fn(Builder $query) => $query->where(
-					'activity_id',
-					Activity::where('user_id', Auth::user()->id)->first()->id
-				)
+				function (Builder $query) {
+					$user = User::findOrFail(Auth::user()->id);
+
+					return $query->whereIn('activity_id', $user->getActivitiesIds());
+				}
 			)
 			->filters([
 				SelectFilter::make('career')
@@ -380,6 +384,12 @@ class StudentResource extends Resource
 				Tables\Actions\BulkActionGroup::make([
 					Tables\Actions\DeleteBulkAction::make(),
 				]),
+				ExportBulkAction::make()
+					->exports([
+						ExcelExport::make()->withFilename(date('Y-m-d') . '-extraescolares')
+							->withColumns()
+							->fromTable(),
+					]),
 			]);
 	}
 

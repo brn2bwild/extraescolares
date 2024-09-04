@@ -52,4 +52,9 @@ class User extends Authenticatable
 	{
 		return $this->BelongsToMany(Activity::class);
 	}
+
+	public function getActivitiesIds(): array
+	{
+		return $this->activities->pluck('id')->toArray();
+	}
 }
