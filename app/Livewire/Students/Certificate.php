@@ -91,7 +91,7 @@ class Certificate extends Component
 
 			return response()->streamDownload(
 				fn() => print($pdf),
-				strtolower(str_replace(" ", "_", $this->student_data['name'])) . "certificate.pdf"
+				strtolower(str_replace(" ", "_", $this->student_data['name'])) . "-certificate.pdf"
 			);
 		}
 	}
