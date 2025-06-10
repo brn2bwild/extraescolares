@@ -7,21 +7,26 @@ use App\Filament\Admin\Resources\StudentResource\Pages;
 use App\Filament\Admin\Resources\StudentResource\RelationManagers;
 use App\Models\Career;
 use App\Models\Student;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint\Operators\IsRelatedToOperator;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Str;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
@@ -240,6 +245,10 @@ class StudentResource extends Resource
 					->relationship('period', 'lapse')
 					->preload()
 					->label('Periodo'),
+				SelectFilter::make('activity')
+					->relationship('activity', 'name')
+					->preload()
+					->label('Actividad')
 			])
 			->actions([
 				Tables\Actions\Action::make('evaluateStudent')
@@ -347,12 +356,60 @@ class StudentResource extends Resource
 				Tables\Actions\BulkActionGroup::make([
 					Tables\Actions\DeleteBulkAction::make(),
 				]),
+				BulkActionGroup::make([
+					BulkAction::make('Export')
+						->icon('heroicon-m-arrow-down-tray')
+						->openUrlInNewTab()
+						->deselectRecordsAfterCompletion()
+						->action(function (Collection $records) {
+							$counted_records = $records->map(function ($record, $key = 1) {
+								return [
+									'number' => $key,
+									'name' => ucwords(strtolower($record->name)),
+									'university_enrollment' => $record->university_enrollment,
+									'career' => $record->career->name,
+								];
+							});
+
+							// $records_chunks = $counted_records->chunk(16);
+
+							// dd($records_chunks);
+
+							$date = Carbon::now()->toDateString();
+
+							$activity = $records[0]->activity->name;
+							$teacher = $records[0]->activity->user[0]->name;
+							// $admin = 
+
+							return response()->streamDownload(function () use (
+								$activity,
+								$teacher,
+								$counted_records,
+								$date,
+							) {
+
+								echo Pdf::loadHTML(
+									Blade::render('pdf.list', [
+										'students' => $counted_records,
+										'activity' => $activity,
+										'teacher' => $teacher,
+										'date' => $date,
+									])
+								)
+									->setPaper('letter', 'portrait')
+									->stream();
+							}, 'estudiantes' . '.pdf');
+						})
+						->label('Exportar a PDF'),
+				])
+					->label('Listas'),
 				ExportBulkAction::make()
 					->exports([
 						ExcelExport::make()->withFilename(date('Y-m-d') . '-extraescolares')
 							->withColumns()
 							->fromTable(),
-					]),
+					])
+					->label('Exportar a excel'),
 			])
 			->defaultSort('created_at', 'desc');
 	}
