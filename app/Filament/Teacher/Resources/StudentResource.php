@@ -82,10 +82,10 @@ class StudentResource extends Resource
 					->label('Número de ficha'),
 				Forms\Components\TextInput::make('university_enrollment')
 					->unique(ignoreRecord: true)
-					->regex('/^\d{2}[A-Z]\d{5}$/')
+					->regex('/^[A-Z]?\d{2}[A-Z]\d{5}$/')
 					->validationMessages([
 						'unique' => 'El número de matrícula ya existe',
-						'regex' => 'La matrícula debe tener el formato 00E00000',
+						'regex' => 'La matrícula debe tener el formato B00E00000',
 					])
 					->maxLength(8)
 					->label('Matrícula'),
